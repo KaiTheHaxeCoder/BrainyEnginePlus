@@ -97,6 +97,9 @@ class HScript extends Iris
 				this.modFolder = myFolder[1];
 			#end
 		}
+
+		trace('hscript at: ' + filePath);
+
 		var scriptThing:String = file;
 		var scriptName:String = null;
 		if(parent == null && file != null)
@@ -160,6 +163,9 @@ class HScript extends Iris
 		set('FlxColor', CustomFlxColor);
 		set('Countdown', backend.BaseStage.Countdown);
 		set('PlayState', PlayState);
+		set('state', FlxG.state);
+		set('members', FlxG.state.members);
+		set('donkeyKongIsMyFavoriteAvenger', 'donkeyKongIsMyFavoriteAvenger');
 		set('Paths', Paths);
 		set('Conductor', Conductor);
 		set('ClientPrefs', ClientPrefs);
@@ -179,6 +185,8 @@ class HScript extends Iris
 		#if flxanimate
 		set('FlxAnimate', FlxAnimate);
 		#end
+
+		set('CustomState', backend.MusicBeatState.CustomState);
 
 		// Functions & Variables
 		set('setVar', function(name:String, value:Dynamic) {

@@ -3,8 +3,12 @@ package backend;
 import flixel.FlxState;
 import backend.PsychCamera;
 
-class MusicBeatState extends FlxState
+import psychlua.*;
+import psychlua.helpers.*;
+
+class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 {
+	public var scripts:Map<String, HScript> = new Map();
 	private var curSection:Int = 0;
 	private var stepsToDo:Int = 0;
 
@@ -25,19 +29,66 @@ class MusicBeatState extends FlxState
 	public static function getVariables()
 		return getState().variables;
 
-	override function create() {
+
+	public var script:HScript;
+	public var scriptName:String;
+
+	#if HSCRIPT_ALLOWED
+	public function reloadScripts()
+	{
+		trace(scriptName);
+		scripts.set(scriptName, Scripting.loadScript(scriptName, 'states'));
+		script = scripts.get(scriptName);
+	}
+
+	#end
+	override public function new(?nameOver:String)
+	{
+		super();
+		#if HSCRIPT_ALLOWED
+		if (nameOver == null)
+		{
+			var fullName = Type.getClassName(Type.getClass(this));
+			scriptName = fullName.split(".").pop();
+		}
+		else
+			scriptName = nameOver;
+		reloadScripts();
+		#end
+	}
+
+	public function call(func, ?args):Dynamic
+	{
+		if (script != null)
+			if (script.exists(func)) 
+				return script.call(func, args);
+
+		return null;
+	}
+
+	override function create() 
+	{
+		if (script != null)
+			script.execute();
+
+		trace((script == null));
+
+		call('onCreatePre');
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
 
 		if(!_psychCameraInitialized) initPsychCamera();
 
 		super.create();
+		call('onCreate');
 
 		if(!skip) {
 			openSubState(new CustomFadeTransition(0.5, true));
 		}
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
+
+		call('onCreatePost');
 	}
 
 	public function initPsychCamera():PsychCamera
@@ -53,6 +104,7 @@ class MusicBeatState extends FlxState
 	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
 	{
+		call('onUpdate', [elapsed]);
 		//everyStep();
 		var oldStep:Int = curStep;
 		timePassedOnState += elapsed;
@@ -81,6 +133,8 @@ class MusicBeatState extends FlxState
 		});
 
 		super.update(elapsed);
+
+		call('onUpdatePost', [elapsed]);
 	}
 
 	private function updateSection():Void
@@ -169,6 +223,7 @@ class MusicBeatState extends FlxState
 
 	public function stepHit():Void
 	{
+		call('onStepHit');
 		stagesFunc(function(stage:BaseStage) {
 			stage.curStep = curStep;
 			stage.curDecStep = curDecStep;
@@ -182,6 +237,7 @@ class MusicBeatState extends FlxState
 	public var stages:Array<BaseStage> = [];
 	public function beatHit():Void
 	{
+		call('onBeatHit');
 		//trace('Beat: ' + curBeat);
 		stagesFunc(function(stage:BaseStage) {
 			stage.curBeat = curBeat;
@@ -192,6 +248,7 @@ class MusicBeatState extends FlxState
 
 	public function sectionHit():Void
 	{
+		call('onSectionHit');
 		//trace('Section: ' + curSection + ', Beat: ' + curBeat + ', Step: ' + curStep);
 		stagesFunc(function(stage:BaseStage) {
 			stage.curSection = curSection;
@@ -211,5 +268,15 @@ class MusicBeatState extends FlxState
 		var val:Null<Float> = 4;
 		if(PlayState.SONG != null && PlayState.SONG.notes[curSection] != null) val = PlayState.SONG.notes[curSection].sectionBeats;
 		return val == null ? 4 : val;
+	}
+}
+
+class CustomState
+{
+	public static function switchState(state:String):MusicBeatState
+	{
+		var nextState = new MusicBeatState(state);
+		MusicBeatState.switchState(nextState);
+		return MusicBeatState.getState();
 	}
 }
