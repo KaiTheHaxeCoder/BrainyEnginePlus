@@ -185,6 +185,8 @@
 	<!--Macro fixes-->
 	<haxeflag name="--macro" value="allowPackage('flash')" />
 	<haxeflag name="--macro" value="include('my.pack')" />
+	<haxeflag name="--macro" value="keep('states')" />
+	<haxeflag name="--macro" value="keep('objects')" />
 
 	<haxedef name="hscriptPos" if="HSCRIPT_ALLOWED" />
 
