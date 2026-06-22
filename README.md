@@ -2,7 +2,7 @@
 
 Basically my old Psych fork but better or something
 
-<small>These versions might include unstable bugs if you encounter any please submit them in the issues</small>
+This engine is under active development and therefore might be very unstable! Report any bugs to the Issues tab please!
 
 ## Repo information
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/Brainy0789/BrainyEnginePlus)
