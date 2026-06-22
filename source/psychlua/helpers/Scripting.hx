@@ -42,7 +42,7 @@ class Scripting
         } 
         catch(e)
         {
-            trace('Script at $parentFolder/$name.hx not found.');
+            trace('Error loading script with: $e');
         }
         return hscript;
     }

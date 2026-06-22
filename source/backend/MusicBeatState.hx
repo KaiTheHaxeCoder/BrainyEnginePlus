@@ -1,10 +1,13 @@
 package backend;
 
+import psychlua.events.ScriptEvent.StepHitEvent;
+import psychlua.events.ScriptEvent.UpdateEvent;
 import flixel.FlxState;
 import backend.PsychCamera;
 
 import psychlua.*;
 import psychlua.helpers.*;
+import psychlua.events.ScriptEvent;
 
 class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 {
@@ -102,9 +105,11 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 	}
 
 	public static var timePassedOnState:Float = 0;
+	var updateEvent:UpdateEvent = new UpdateEvent();
 	override function update(elapsed:Float)
 	{
-		call('onUpdate', [elapsed]);
+		updateEvent.elapsed = elapsed;
+		call('onUpdate', [updateEvent]);
 		//everyStep();
 		var oldStep:Int = curStep;
 		timePassedOnState += elapsed;
@@ -134,7 +139,15 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 
 		super.update(elapsed);
 
-		call('onUpdatePost', [elapsed]);
+		call('onUpdatePost', [updateEvent]);
+	}
+
+	override public function destroy()
+	{
+		var destroyEvent:ScriptEvent = new ScriptEvent();
+		call('onDestroy', [destroyEvent]);
+		if (destroyEvent.cancelled == false)
+			super.destroy();
 	}
 
 	private function updateSection():Void
@@ -221,9 +234,16 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		return cast (FlxG.state, MusicBeatState);
 	}
 
+	var stepHitEvent:StepHitEvent = new StepHitEvent();
+
 	public function stepHit():Void
 	{
-		call('onStepHit');
+		stepHitEvent.curStep = curStep;
+		stepHitEvent.curBeat = curBeat;
+		stepHitEvent.curSection = curSection;
+		stepHitEvent.curDecStep = curDecStep;
+		stepHitEvent.curDecBeat = curDecBeat;
+		call('onStepHit', [stepHitEvent]);
 		stagesFunc(function(stage:BaseStage) {
 			stage.curStep = curStep;
 			stage.curDecStep = curDecStep;
@@ -237,7 +257,7 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 	public var stages:Array<BaseStage> = [];
 	public function beatHit():Void
 	{
-		call('onBeatHit');
+		call('onBeatHit', [stepHitEvent]);
 		//trace('Beat: ' + curBeat);
 		stagesFunc(function(stage:BaseStage) {
 			stage.curBeat = curBeat;
@@ -248,7 +268,7 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 
 	public function sectionHit():Void
 	{
-		call('onSectionHit');
+		call('onSectionHit', [stepHitEvent]);
 		//trace('Section: ' + curSection + ', Beat: ' + curBeat + ', Step: ' + curStep);
 		stagesFunc(function(stage:BaseStage) {
 			stage.curSection = curSection;

@@ -28,6 +28,7 @@ class PlayStateRewrite extends MusicBeatState
 	];
 
     public var playerStrum:Strum;
+	public var opponentStrum:Strum;
 
     public static var instance:Dynamic;
     public static var SONG:Dynamic;
