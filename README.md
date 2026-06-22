@@ -10,4 +10,5 @@ stable - stable source versions. if your making a mod i recommend using one of t
 
 ## Features
 
-Scriptable States!
+### Scriptable States!
+Use hscript to code your own states without building from source!
