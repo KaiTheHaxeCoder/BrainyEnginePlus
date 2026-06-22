@@ -18,3 +18,5 @@ Basically my old Psych fork but better or something
 
 ### Scriptable States!
 Use hscript to code your own states without building from source!
+
+Learn how to edit scriptable states [here](https://github.com/Brainy0789/BrainyEnginePlus/wiki/Custom-States#custom-states)
