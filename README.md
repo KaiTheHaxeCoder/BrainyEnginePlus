@@ -5,8 +5,8 @@ Basically my old Psych fork but better or something
 ## Repo information
 
 ### Branches
-main - main development branch
-stable - stable source versions. if your making a mod i recommend using one of these branches.
+- main - main development branch
+- stable - stable source versions. if your making a mod i recommend using one of these branches.
 
 ## Features
 
