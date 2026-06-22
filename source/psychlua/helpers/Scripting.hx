@@ -7,6 +7,11 @@ import sys.FileSystem;
 
 class Scripting
 {
+    public static function getClassName(obj:Dynamic):String
+    {
+        var fullName = Type.getClassName(Type.getClass(obj));
+		return fullName.split(".").pop();
+    }
     inline static public function loadScript(name:String, parentFolder = 'scripts'):HScript
     {
         var hscript:HScript = null;

@@ -2,6 +2,7 @@ package backend;
 
 import flixel.FlxState;
 import backend.PsychCamera;
+import backend.StateData;
 
 import psychlua.*;
 import psychlua.helpers.*;
@@ -49,8 +50,7 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		#if HSCRIPT_ALLOWED
 		if (nameOver == null)
 		{
-			var fullName = Type.getClassName(Type.getClass(this));
-			scriptName = fullName.split(".").pop();
+			scriptName = Scripting.getClassName(this);
 		}
 		else
 			scriptName = nameOver;
@@ -89,6 +89,11 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
 
+		createPost();
+	}
+
+	function createPost()
+	{
 		call('onCreatePost');
 	}
 
@@ -196,6 +201,16 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
+	private static function _switchState(nextState:FlxState)
+	{
+		var stateName = Scripting.getClassName(nextState);
+		var data = StateData.loadStateData(Scripting.getClassName(nextState));
+			if (data.mode == 'overwrite')
+				CustomState.switchState(stateName);
+			else
+				FlxG.switchState(nextState);
+	}
+
 	public static function switchState(nextState:FlxState = null) {
 		if(nextState == null) nextState = FlxG.state;
 		if(nextState == FlxG.state)
@@ -204,7 +219,12 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 			return;
 		}
 
-		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
+		
+
+		if(FlxTransitionableState.skipNextTransIn) 
+		{
+			_switchState(nextState);
+		}
 		else startTransition(nextState);
 		FlxTransitionableState.skipNextTransIn = false;
 	}
@@ -225,7 +245,7 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		if(nextState == FlxG.state)
 			CustomFadeTransition.finishCallback = function() FlxG.resetState();
 		else
-			CustomFadeTransition.finishCallback = function() FlxG.switchState(nextState);
+			CustomFadeTransition.finishCallback = function() _switchState(nextState);
 	}
 
 	public static function getState():MusicBeatState {
