@@ -1,4 +1,4 @@
-package psychlua;
+package scripting;
 
 import backend.WeekData;
 import objects.Character;

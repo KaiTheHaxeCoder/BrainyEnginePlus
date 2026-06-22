@@ -1,4 +1,4 @@
-package psychlua;
+package scripting;
 
 import flixel.FlxBasic;
 import objects.Character;

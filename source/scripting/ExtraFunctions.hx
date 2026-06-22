@@ -1,4 +1,4 @@
-package psychlua;
+package scripting;
 
 import flixel.util.FlxSave;
 import openfl.utils.Assets;
