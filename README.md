@@ -3,6 +3,12 @@
 Basically my old Psych fork but better or something
 
 ## Repo information
+![GitHub commit activity](https://img.shields.io/github/commit-activity/t/Brainy0789/BrainyEnginePlus)
+![GitHub Release](https://img.shields.io/github/v/release/Brainy0789/BrainyEnginePlus)
+![GitHub repo size](https://img.shields.io/github/repo-size/Brainy0789/BrainyEnginePlus)
+
+
+
 
 ### Branches
 - main - main development branch
