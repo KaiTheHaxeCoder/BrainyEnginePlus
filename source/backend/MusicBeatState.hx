@@ -1,7 +1,5 @@
 package backend;
 
-import psychlua.events.ScriptEvent.StepHitEvent;
-import psychlua.events.ScriptEvent.UpdateEvent;
 import flixel.FlxState;
 import backend.PsychCamera;
 
