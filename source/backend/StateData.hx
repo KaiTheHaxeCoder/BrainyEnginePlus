@@ -56,7 +56,7 @@ class StateData
             trace('Failed to load stage data: $path | ${e}');
             return new StateData({});
         }
-        var data = cast(Json.parse(rawJson));
+        var data:StateFile = Json.parse(rawJson);
         return new StateData(data);
     }
 }

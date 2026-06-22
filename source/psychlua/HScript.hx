@@ -186,7 +186,8 @@ class HScript extends Iris
 		set('FlxAnimate', FlxAnimate);
 		#end
 
-		set('CustomState', backend.MusicBeatState.CustomState);
+		set('ScriptedStateHandler', backend.MusicBeatState.ScriptedStateHandler);
+		set('CustomState', backend.MusicBeatState.ScriptedStateHandler);
 
 		// Functions & Variables
 		set('setVar', function(name:String, value:Dynamic) {

@@ -205,10 +205,10 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 	{
 		var stateName = Scripting.getClassName(nextState);
 		var data = StateData.loadStateData(Scripting.getClassName(nextState));
-			if (data.mode == 'overwrite')
-				CustomState.switchState(stateName);
-			else
-				FlxG.switchState(nextState);
+		if (data.mode == 'override')
+			nextState = ScriptedStateHandler.getStateInstance(stateName);
+		
+		FlxG.switchState(nextState);
 	}
 
 	public static function switchState(nextState:FlxState = null) {
@@ -218,8 +218,6 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 			resetState();
 			return;
 		}
-
-		
 
 		if(FlxTransitionableState.skipNextTransIn) 
 		{
@@ -309,12 +307,14 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 	}
 }
 
-class CustomState
+class ScriptedStateHandler
 {
-	public static function switchState(state:String):MusicBeatState
+	public static function getStateInstance(state:String):MusicBeatState
 	{
-		var nextState = new MusicBeatState(state);
-		MusicBeatState.switchState(nextState);
-		return MusicBeatState.getState();
+		return new MusicBeatState(state);
+	}
+	public static function switchState(state:String)
+	{
+		MusicBeatState.switchState(getStateInstance(state));
 	}
 }
