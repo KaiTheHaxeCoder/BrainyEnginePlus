@@ -20,7 +20,7 @@ import states.TitleState;
 
 #if HSCRIPT_ALLOWED
 import crowplexus.iris.Iris;
-import psychlua.HScript.HScriptInfos;
+import scripting.HScript.HScriptInfos;
 #end
 
 #if (linux || mac)
@@ -39,6 +39,7 @@ import haxe.io.Path;
 #end
 
 import backend.Highscore;
+import backend.macros.Macros;
 
 // NATIVE API STUFF, YOU CAN IGNORE THIS AND SCROLL //
 #if (linux && !debug)
@@ -150,7 +151,7 @@ class Main extends Sprite
 		}
 		#end
 
-		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
+		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(scripting.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end

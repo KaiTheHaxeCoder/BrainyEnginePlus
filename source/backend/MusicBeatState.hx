@@ -4,11 +4,11 @@ import flixel.FlxState;
 import backend.PsychCamera;
 import backend.StateData;
 
-import psychlua.*;
-import psychlua.helpers.*;
-import psychlua.events.ScriptEvent;
+import scripting.*;
+import scripting.helpers.*;
+import scripting.events.ScriptEvent;
 
-class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
+class MusicBeatState extends FlxState implements scripting.interfaces.IScriptable
 {
 	public var scripts:Map<String, HScript> = new Map();
 	private var curSection:Int = 0;

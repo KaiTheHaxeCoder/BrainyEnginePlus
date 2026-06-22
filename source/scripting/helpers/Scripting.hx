@@ -1,6 +1,6 @@
-package psychlua.helpers;
+package scripting.helpers;
 
-import psychlua.*;
+import scripting.*;
 #if MODS_ALLOWED
 import sys.FileSystem;
 #end

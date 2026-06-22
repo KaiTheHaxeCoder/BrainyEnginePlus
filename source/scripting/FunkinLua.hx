@@ -30,13 +30,13 @@ import states.FreeplayState;
 import substates.PauseSubState;
 import substates.GameOverSubstate;
 
-import psychlua.LuaUtils;
-import psychlua.LuaUtils.LuaTweenOptions;
+import scripting.LuaUtils;
+import scripting.LuaUtils.LuaTweenOptions;
 #if HSCRIPT_ALLOWED
-import psychlua.HScript;
+import scripting.HScript;
 #end
-import psychlua.DebugLuaText;
-import psychlua.ModchartSprite;
+import scripting.DebugLuaText;
+import scripting.ModchartSprite;
 
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;

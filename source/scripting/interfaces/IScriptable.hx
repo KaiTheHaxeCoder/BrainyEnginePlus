@@ -1,6 +1,6 @@
-package psychlua.interfaces;
+package scripting.interfaces;
 
-import psychlua.*;
+import scripting.*;
 
 interface IScriptable 
 {

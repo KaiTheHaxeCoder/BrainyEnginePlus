@@ -2,11 +2,11 @@ package psychlua;
 
 import flixel.FlxBasic;
 import objects.Character;
-import psychlua.LuaUtils;
-import psychlua.CustomSubstate;
+import scripting.LuaUtils;
+import scripting.CustomSubstate;
 
 #if LUA_ALLOWED
-import psychlua.FunkinLua;
+import scripting.FunkinLua;
 #end
 
 #if HSCRIPT_ALLOWED

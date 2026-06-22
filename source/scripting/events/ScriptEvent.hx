@@ -1,4 +1,4 @@
-package psychlua.events;
+package scripting.events;
 
 /**
     Base Class for Script Events, doesn't really do anything by itself.
