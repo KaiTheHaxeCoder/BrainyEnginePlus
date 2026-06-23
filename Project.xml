@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Brainy Engine+" file="BrainyEngine+" packageName="com.Brainy7890.BrainyEngine" package="com.Brainy7890.BrainyEngine" main="Main" version="0.1.1b" company="Brainy7890" />
+	<app title="Friday Night Funkin': Brainy Engine+" file="BrainyEngine+" packageName="com.Brainy7890.BrainyEngine" package="com.Brainy7890.BrainyEngine" main="Main" version="0.1.1c" company="Brainy7890" />
 
 	<!--Switch Export with Unique ApplicationID and Icon-->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
