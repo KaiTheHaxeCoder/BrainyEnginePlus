@@ -1,0 +1,1 @@
+haxelib run dox -i types.xml --title "Brainyverse API Documentation" --include-private -o ./docs
