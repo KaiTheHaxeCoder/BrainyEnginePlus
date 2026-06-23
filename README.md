@@ -1,5 +1,7 @@
 # Brainy Engine+
 
+<img src="/art/icons/iconOG.png" height=512>
+
 Basically my old Psych fork but better or something
 
 This engine is under active development and therefore might be very unstable! Report any bugs to the Issues tab please!
