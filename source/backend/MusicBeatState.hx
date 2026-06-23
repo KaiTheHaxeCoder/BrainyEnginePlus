@@ -204,6 +204,7 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 	private static function _switchState(nextState:FlxState)
 	{
 		var stateName = Scripting.getClassName(nextState);
+		ScriptedStateHandler.curState = stateName;
 		var data = StateData.loadStateData(Scripting.getClassName(nextState));
 		if (data.mode == 'override')
 			nextState = ScriptedStateHandler.getStateInstance(stateName);
@@ -228,7 +229,7 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 	}
 
 	public static function resetState() {
-		if(FlxTransitionableState.skipNextTransIn) FlxG.resetState();
+		if(FlxTransitionableState.skipNextTransIn) ScriptedStateHandler.resetState();
 		else startTransition();
 		FlxTransitionableState.skipNextTransIn = false;
 	}
@@ -309,12 +310,25 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 
 class ScriptedStateHandler
 {
+	public static var curState:String;
+
 	public static function getStateInstance(state:String):MusicBeatState
 	{
 		return new MusicBeatState(state);
 	}
 	public static function switchState(state:String)
 	{
+		curState = state;
 		MusicBeatState.switchState(getStateInstance(state));
+	}
+
+	public static function resetState()
+	{
+		if (curState == Scripting.getClassName(FlxG.state))
+		{
+			FlxG.resetState();
+			return;
+		}
+		switchState(curState);
 	}
 }

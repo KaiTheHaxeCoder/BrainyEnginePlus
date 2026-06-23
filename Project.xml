@@ -137,6 +137,9 @@
 	
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
+	<haxeflag name="-xml" />
+	<haxeflag name="types.xml" />
+
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	
 	<!-- Show debug traces for hxCodec -->
