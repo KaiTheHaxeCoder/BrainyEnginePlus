@@ -7,6 +7,7 @@ import objects.Character;
 
 import options.Option.OptionType;
 
+@:dox(hide)
 class ModSettingsSubState extends BaseOptionsMenu
 {
 	var save:Map<String, Dynamic> = new Map<String, Dynamic>();

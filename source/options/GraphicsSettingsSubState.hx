@@ -2,6 +2,7 @@ package options;
 
 import objects.Character;
 
+@:dox(hide)
 class GraphicsSettingsSubState extends BaseOptionsMenu
 {
 	var antialiasingOption:Int;

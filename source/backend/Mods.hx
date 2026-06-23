@@ -4,12 +4,14 @@ import openfl.utils.Assets;
 
 import haxe.Json;
 
+@:dox(hide)
 typedef ModsList = {
 	enabled:Array<String>,
 	disabled:Array<String>,
 	all:Array<String>
 };
 
+@:dox(hide)
 class Mods
 {
 	static public var currentModDirectory:String = '';

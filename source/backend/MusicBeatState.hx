@@ -201,6 +201,7 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
+	@:dox(hide)
 	private static function _switchState(nextState:FlxState)
 	{
 		var stateName = Scripting.getClassName(nextState);
@@ -310,18 +311,30 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 
 class ScriptedStateHandler
 {
+	/**
+		Name of the current state
+	**/
 	public static var curState:String;
 
+	/**
+		Gets a softcoded state's instance by string.
+	**/
 	public static function getStateInstance(state:String):MusicBeatState
 	{
 		return new MusicBeatState(state);
 	}
+	/**
+		Switches to a new softcoded state.
+	**/
 	public static function switchState(state:String)
 	{
 		curState = state;
 		MusicBeatState.switchState(getStateInstance(state));
 	}
 
+	/**
+		Reset current class. You may also use MusicBeatState.resetState()
+	**/
 	public static function resetState()
 	{
 		if (curState == Scripting.getClassName(FlxG.state))
