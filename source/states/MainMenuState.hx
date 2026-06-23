@@ -40,6 +40,7 @@ class MainMenuState extends MusicBeatState
 	static var showOutdatedWarning:Bool = true;
 	override function create()
 	{
+		substates.OutdatedSubState.updateVersion = CoolUtil.checkForUpdates();
 		#if MODS_ALLOWED
 		Mods.pushGlobalMods();
 		#end
@@ -120,7 +121,7 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		#if CHECK_FOR_UPDATES
-		if (showOutdatedWarning && ClientPrefs.data.checkForUpdates && substates.OutdatedSubState.updateVersion != psychEngineVersion) {
+		if (showOutdatedWarning && ClientPrefs.data.checkForUpdates && substates.OutdatedSubState.updateVersion != lime.app.Application.current.meta.get('version')) {
 			persistentUpdate = false;
 			showOutdatedWarning = false;
 			openSubState(new substates.OutdatedSubState());
