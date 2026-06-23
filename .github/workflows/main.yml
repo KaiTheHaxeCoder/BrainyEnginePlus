@@ -43,7 +43,7 @@ jobs:
       - name: Publish Artifact
         uses: actions/upload-artifact@v4.3.4
         with:
-          name: linuxBuild
+          name: linuxBuild_${{ github.sha }}
           path: 'export/release/linux/bin'
   buildWindows:
     runs-on: windows-latest
@@ -72,7 +72,7 @@ jobs:
       - name: Publish Artifact
         uses: actions/upload-artifact@v4.3.4
         with:
-          name: windowsBuild
+          name: windowsBuild_${{ github.sha }}
           path: export/release/windows/bin
   buildMac:
     runs-on: macos-15
@@ -100,5 +100,5 @@ jobs:
       - name: Publish Artifact
         uses: actions/upload-artifact@v4.3.4
         with:
-          name: macBuild
+          name: macBuild_${{ github.sha }}
           path: export/release/macos/bin
