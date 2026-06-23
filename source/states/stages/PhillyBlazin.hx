@@ -10,6 +10,7 @@ import substates.GameOverSubstate;
 import states.stages.objects.*;
 import objects.Note;
 
+@:dox(hide)
 class PhillyBlazin extends BaseStage
 {
 	var rainShader:RainShader;

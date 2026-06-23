@@ -6,7 +6,7 @@ import haxe.Exception;
 import haxe.Json;
 
 #if LUA_ALLOWED
-import psychlua.FunkinLua;
+import scripting.FunkinLua;
 #end
 
 typedef Achievement =

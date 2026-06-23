@@ -42,14 +42,14 @@ import states.stages.*;
 import states.stages.objects.*;
 
 #if LUA_ALLOWED
-import psychlua.*;
+import scripting.*;
 #else
-import psychlua.LuaUtils;
-import psychlua.HScript;
+import scripting.LuaUtils;
+import scripting.HScript;
 #end
 
 #if HSCRIPT_ALLOWED
-import psychlua.HScript.HScriptInfos;
+import scripting.HScript.HScriptInfos;
 import crowplexus.iris.Iris;
 import crowplexus.hscript.Expr.Error as IrisError;
 import crowplexus.hscript.Printer;
@@ -248,11 +248,11 @@ class PlayState extends MusicBeatState
 	var boyfriendIdled:Bool = false;
 
 	// Lua shit
-	public static var instance:PlayState;
 	#if LUA_ALLOWED public var luaArray:Array<FunkinLua> = []; #end
+	public static var instance:PlayState;
 
 	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
-	private var luaDebugGroup:FlxTypedGroup<psychlua.DebugLuaText>;
+	private var luaDebugGroup:FlxTypedGroup<scripting.DebugLuaText>;
 	#end
 	public var introSoundsSuffix:String = '';
 
@@ -393,7 +393,7 @@ class PlayState extends MusicBeatState
 		if(isPixelStage) introSoundsSuffix = '-pixel';
 
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
-		luaDebugGroup = new FlxTypedGroup<psychlua.DebugLuaText>();
+		luaDebugGroup = new FlxTypedGroup<scripting.DebugLuaText>();
 		luaDebugGroup.cameras = [camOther];
 		add(luaDebugGroup);
 		#end
@@ -690,14 +690,14 @@ class PlayState extends MusicBeatState
 
 	#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 	public function addTextToDebug(text:String, color:FlxColor) {
-		var newText:psychlua.DebugLuaText = luaDebugGroup.recycle(psychlua.DebugLuaText);
+		var newText:scripting.DebugLuaText = luaDebugGroup.recycle(scripting.DebugLuaText);
 		newText.text = text;
 		newText.color = color;
 		newText.disableTime = 6;
 		newText.alpha = 1;
 		newText.setPosition(10, 8 - newText.height);
 
-		luaDebugGroup.forEachAlive(function(spr:psychlua.DebugLuaText) {
+		luaDebugGroup.forEachAlive(function(spr:scripting.DebugLuaText) {
 			spr.y += newText.height + 2;
 		});
 		luaDebugGroup.add(newText);
@@ -3144,7 +3144,7 @@ class PlayState extends MusicBeatState
 	}
 
 	override function destroy() {
-		if (psychlua.CustomSubstate.instance != null)
+		if (scripting.CustomSubstate.instance != null)
 		{
 			closeSubState();
 			resetSubState();

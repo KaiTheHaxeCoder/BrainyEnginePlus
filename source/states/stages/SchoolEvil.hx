@@ -6,6 +6,7 @@ import substates.GameOverSubstate;
 import cutscenes.DialogueBox;
 import openfl.utils.Assets as OpenFlAssets;
 
+@:dox(hide)
 class SchoolEvil extends BaseStage
 {
 	override function create()

@@ -14,7 +14,6 @@ enum MainMenuColumn {
 
 class MainMenuState extends MusicBeatState
 {
-	public static var brainyEngineVersion:String = '0.1.0';
 	public static var psychEngineVersion:String = '1.0.4'; // This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 	public static var curColumn:MainMenuColumn = CENTER;
@@ -41,8 +40,7 @@ class MainMenuState extends MusicBeatState
 	static var showOutdatedWarning:Bool = true;
 	override function create()
 	{
-		super.create();
-
+		substates.OutdatedSubState.updateVersion = CoolUtil.checkForUpdates();
 		#if MODS_ALLOWED
 		Mods.pushGlobalMods();
 		#end
@@ -95,16 +93,22 @@ class MainMenuState extends MusicBeatState
 			rightItem.x -= rightItem.width;
 		}
 
-		var psychVer:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
+		var psychVer:FlxText = new FlxText(12, FlxG.height - 24, 0, "Psych Engine v" + psychEngineVersion, 12);
 		psychVer.scrollFactor.set();
 		psychVer.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(psychVer);
-		var fnfVer:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' v" + Application.current.meta.get('version'), 12);
+		var fnfVer:FlxText = new FlxText(12, FlxG.height - 44, 0, "Brainy Engine+ v" + Application.current.meta.get('version'), 12);
 		fnfVer.scrollFactor.set();
 		fnfVer.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(fnfVer);
 		changeItem();
 
+		super.create();
+	}
+	
+	override function createPost()
+	{
+		super.createPost();
 		#if ACHIEVEMENTS_ALLOWED
 		// Unlocks "Freaky on a Friday Night" achievement if it's a Friday and between 18:00 PM and 23:59 PM
 		var leDate = Date.now();
@@ -117,7 +121,7 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		#if CHECK_FOR_UPDATES
-		if (showOutdatedWarning && ClientPrefs.data.checkForUpdates && substates.OutdatedSubState.updateVersion != psychEngineVersion) {
+		if (showOutdatedWarning && ClientPrefs.data.checkForUpdates && substates.OutdatedSubState.updateVersion != lime.app.Application.current.meta.get('version')) {
 			persistentUpdate = false;
 			showOutdatedWarning = false;
 			openSubState(new substates.OutdatedSubState());

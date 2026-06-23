@@ -8,6 +8,7 @@ import flixel.group.FlxGroup;
 import objects.Note;
 import objects.Character;
 
+@:dox(hide)
 enum Countdown
 {
 	THREE;

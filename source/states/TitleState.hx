@@ -67,7 +67,6 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		Paths.clearStoredMemory();
-		super.create();
 		Paths.clearUnusedMemory();
 
 		if(!initialized)
@@ -109,6 +108,7 @@ class TitleState extends MusicBeatState
 		else
 			startIntro();
 		#end
+		super.create();
 	}
 
 	var logoBl:FlxSprite;

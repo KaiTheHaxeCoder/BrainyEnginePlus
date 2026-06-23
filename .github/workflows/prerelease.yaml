@@ -1,0 +1,159 @@
+name: Build [Publish Pre-Release]
+
+
+on:
+  workflow_dispatch:
+
+jobs:
+  buildLinux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - name: Get short SHA
+        id: slug
+        run: echo "sha_short=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+
+      - name: Install Haxelib
+        run: |
+          sudo apt-get install libvlc-dev
+          sudo apt-get install libvlccore-dev
+          haxelib setup ~/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          chmod +x ./setup/unix.sh
+          sh ./setup/unix.sh
+
+      - name: Skip SScript setup mode
+        run: echo 'oy9:showMacroty8:loopCosti25y10:includeAllfg' >> ~/settings.cocoa
+
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
+
+      - name: Compile
+        run: haxelib run lime build Project.xml linux --app-version="4.0.0-${{ github.run_id}}" -D officialBuild
+
+      - name: Zip Build
+        run: |
+          cd export/release/linux/bin
+          zip -r ../../../../linuxBuild-${{ steps.slug.outputs.sha_short }}.zip .
+
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4.3.4
+        with:
+          name: linuxBuild-${{ steps.slug.outputs.sha_short }}
+          path: linuxBuild-${{ steps.slug.outputs.sha_short }}.zip
+          
+  buildWindows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - name: Get short SHA
+        id: slug
+        shell: bash
+        run: echo "sha_short=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+
+      - name: Install Haxelib
+        run: |
+          haxelib setup C:/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          .\"setup/windows.bat"
+        shell: cmd
+
+      - name: Skip SScript setup mode
+        run: echo 'oy9:showMacroty8:loopCosti25y10:includeAllfg' >> %USERPROFILE%/settings.cocoa
+        shell: cmd
+
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
+
+      - name: Compile
+        run: haxelib run lime build windows --app-version="4.0.0-${{ github.run_id}}"  -D officialBuild
+
+      - name: Zip Build
+        run: Compress-Archive -Path export/release/windows/bin\* -DestinationPath windowsBuild-${{ steps.slug.outputs.sha_short }}.zip
+        shell: powershell
+
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4.3.4
+        with:
+          name: windowsBuild-${{ steps.slug.outputs.sha_short }}
+          path: windowsBuild-${{ steps.slug.outputs.sha_short }}.zip
+          
+  buildMac:
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      - name: Get short SHA
+        id: slug
+        run: echo "sha_short=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.3.4
+
+      - name: Install Haxelib
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          chmod +x ./setup/unix.sh
+          sh ./setup/unix.sh
+
+      - name: Skip SScript setup mode
+        run: echo 'oy9:showMacroty8:loopCosti25y10:includeAllfg' >> ~/settings.cocoa
+
+      - name: Create Version Tag
+        run: echo "${{github.run_id}}" > VERSION
+
+      - name: Compile
+        run: haxelib run lime build mac --app-version="4.0.0-${{ github.run_id}}"  -D officialBuild
+
+      - name: Zip Build
+        run: |
+          cd export/release/macos/bin
+          zip -r ../../../../macBuild-${{ steps.slug.outputs.sha_short }}.zip .
+
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v4.3.4
+        with:
+          name: macBuild-${{ steps.slug.outputs.sha_short }}
+          path: macBuild-${{ steps.slug.outputs.sha_short }}.zip
+
+  createRelease:
+    needs: [buildLinux, buildWindows, buildMac]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Get short SHA
+        id: slug
+        run: echo "sha_short=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: '*Build-*'
+          merge-multiple: true
+
+      - name: Create Prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ steps.slug.outputs.sha_short }}
+          name: Build Commit ${{ steps.slug.outputs.sha_short }}
+          prerelease: true
+          files: |
+            linuxBuild-${{ steps.slug.outputs.sha_short }}.zip
+            windowsBuild-${{ steps.slug.outputs.sha_short }}.zip
+            macBuild-${{ steps.slug.outputs.sha_short }}.zip

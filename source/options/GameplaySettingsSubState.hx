@@ -1,5 +1,6 @@
 package options;
 
+@:dox(hide)
 class GameplaySettingsSubState extends BaseOptionsMenu
 {
 	public function new()

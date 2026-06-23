@@ -1,0 +1,1 @@
+haxelib run dox -i types.xml -o ./docs/ --title "Brainy Engine+ API documentation" -D themeColor 0x1294f6

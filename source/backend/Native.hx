@@ -55,6 +55,7 @@ void getHandle() {
 }
 ')
 #end
+@:dox(hide)
 class Native
 {
 	public static function __init__():Void

@@ -1,5 +1,6 @@
 package backend;
 
+@:dox(hide)
 class Language
 {
 	public static var defaultLangName:String = 'English (US)'; //en-US

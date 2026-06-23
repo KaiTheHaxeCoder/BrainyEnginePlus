@@ -13,6 +13,7 @@ import objects.Note;
 import shaders.RGBPalette;
 import shaders.RGBPalette.RGBShaderReference;
 
+@:dox(hide)
 class NotesColorSubState extends MusicBeatSubstate
 {
 	var onModeColumn:Bool = true;

@@ -9,6 +9,7 @@ import openfl.system.System;
 	The FPS class provides an easy-to-use monitor to display
 	the current frame rate of an OpenFL project
 **/
+@:dox(hide)
 class FPSCounter extends TextField
 {
 	/**

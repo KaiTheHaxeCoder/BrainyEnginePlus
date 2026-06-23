@@ -11,6 +11,7 @@ enum HenchmenKillState
 	STOPPING;
 }
 
+@:dox(hide)
 class Limo extends BaseStage
 {
 	var grpLimoDancers:FlxTypedGroup<BackgroundDancer>;

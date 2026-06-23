@@ -5,6 +5,7 @@ import objects.CheckboxThingie;
 
 import options.Option.OptionType;
 
+@:dox(hide)
 class GameplayChangersSubstate extends MusicBeatSubstate
 {
 	private var curSelected:Int = 0;

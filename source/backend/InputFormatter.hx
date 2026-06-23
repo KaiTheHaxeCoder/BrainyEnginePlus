@@ -5,6 +5,7 @@ import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.gamepad.FlxGamepadManager;
 
+@:dox(hide)
 class InputFormatter {
 	public static function getKeyName(key:FlxKey):String {
 		switch (key) {

@@ -1,15 +1,14 @@
 package backend;
 
-import psychlua.events.ScriptEvent.StepHitEvent;
-import psychlua.events.ScriptEvent.UpdateEvent;
 import flixel.FlxState;
 import backend.PsychCamera;
+import backend.StateData;
 
-import psychlua.*;
-import psychlua.helpers.*;
-import psychlua.events.ScriptEvent;
+import scripting.*;
+import scripting.helpers.*;
+import scripting.events.ScriptEvent;
 
-class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
+class MusicBeatState extends FlxState implements scripting.interfaces.IScriptable
 {
 	public var scripts:Map<String, HScript> = new Map();
 	private var curSection:Int = 0;
@@ -36,6 +35,8 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 	public var script:HScript;
 	public var scriptName:String;
 
+	public static var instance:MusicBeatState;
+
 	#if HSCRIPT_ALLOWED
 	public function reloadScripts()
 	{
@@ -47,12 +48,12 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 	#end
 	override public function new(?nameOver:String)
 	{
+		instance = this;
 		super();
 		#if HSCRIPT_ALLOWED
 		if (nameOver == null)
 		{
-			var fullName = Type.getClassName(Type.getClass(this));
-			scriptName = fullName.split(".").pop();
+			scriptName = Scripting.getClassName(this);
 		}
 		else
 			scriptName = nameOver;
@@ -91,6 +92,11 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
 
+		createPost();
+	}
+
+	function createPost()
+	{
 		call('onCreatePost');
 	}
 
@@ -198,6 +204,30 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
+	@:dox(hide)
+	private static function _switchState(nextState:FlxState)
+	{
+		var stateEvent = new StateSwitchEvent();
+		stateEvent.nextState = nextState;
+		if (instance.script != null)
+		{
+			if (instance.script.exists('onStateSwitch'))
+				instance.script.call('onStateSwitch', [stateEvent]);
+			if (stateEvent.cancelled)
+				return;
+		}
+
+		nextState = stateEvent.nextState;
+
+		var stateName = Scripting.getClassName(nextState);
+		ScriptedStateHandler.curState = stateName;
+		var data = StateData.loadStateData(Scripting.getClassName(nextState));
+		if (data.mode == 'override')
+			nextState = ScriptedStateHandler.getStateInstance(stateName);
+		
+		FlxG.switchState(nextState);
+	}
+
 	public static function switchState(nextState:FlxState = null) {
 		if(nextState == null) nextState = FlxG.state;
 		if(nextState == FlxG.state)
@@ -206,13 +236,16 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 			return;
 		}
 
-		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
+		if(FlxTransitionableState.skipNextTransIn) 
+		{
+			_switchState(nextState);
+		}
 		else startTransition(nextState);
 		FlxTransitionableState.skipNextTransIn = false;
 	}
 
 	public static function resetState() {
-		if(FlxTransitionableState.skipNextTransIn) FlxG.resetState();
+		if(FlxTransitionableState.skipNextTransIn) ScriptedStateHandler.resetState();
 		else startTransition();
 		FlxTransitionableState.skipNextTransIn = false;
 	}
@@ -227,7 +260,7 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 		if(nextState == FlxG.state)
 			CustomFadeTransition.finishCallback = function() FlxG.resetState();
 		else
-			CustomFadeTransition.finishCallback = function() FlxG.switchState(nextState);
+			CustomFadeTransition.finishCallback = function() _switchState(nextState);
 	}
 
 	public static function getState():MusicBeatState {
@@ -291,12 +324,39 @@ class MusicBeatState extends FlxState implements psychlua.interfaces.IScriptable
 	}
 }
 
-class CustomState
+class ScriptedStateHandler
 {
-	public static function switchState(state:String):MusicBeatState
+	/**
+		Name of the current state
+	**/
+	public static var curState:String;
+
+	/**
+		Gets a softcoded state's instance by string.
+	**/
+	public static function getStateInstance(state:String):MusicBeatState
 	{
-		var nextState = new MusicBeatState(state);
-		MusicBeatState.switchState(nextState);
-		return MusicBeatState.getState();
+		return new MusicBeatState(state);
+	}
+	/**
+		Switches to a new softcoded state.
+	**/
+	public static function switchState(state:String)
+	{
+		curState = state;
+		MusicBeatState.switchState(getStateInstance(state));
+	}
+
+	/**
+		Reset current class. You may also use MusicBeatState.resetState()
+	**/
+	public static function resetState()
+	{
+		if (curState == Scripting.getClassName(FlxG.state))
+		{
+			FlxG.resetState();
+			return;
+		}
+		switchState(curState);
 	}
 }
