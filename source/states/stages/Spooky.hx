@@ -1,5 +1,6 @@
 package states.stages;
 
+@:dox(hide)
 class Spooky extends BaseStage
 {
 	var halloweenBG:BGSprite;

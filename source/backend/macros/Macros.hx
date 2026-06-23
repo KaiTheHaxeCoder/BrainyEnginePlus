@@ -1,5 +1,6 @@
 package backend.macros;
 
+@:dox(hide)
 class Macros
 {
     public static macro function print(msg:String)

@@ -3,6 +3,7 @@ package states.stages;
 import states.stages.objects.*;
 import objects.Character;
 
+@:dox(hide)
 class Philly extends BaseStage
 {
 	var phillyLightsColors:Array<FlxColor>;

@@ -5,6 +5,7 @@ import cutscenes.CutsceneHandler;
 import substates.GameOverSubstate;
 import objects.Character;
 
+@:dox(hide)
 class Tank extends BaseStage
 {
 	var tankWatchtower:BGSprite;

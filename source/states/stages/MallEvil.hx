@@ -2,6 +2,7 @@ package states.stages;
 
 import states.stages.objects.*;
 
+@:dox(hide)
 class MallEvil extends BaseStage
 {
 	override function create()

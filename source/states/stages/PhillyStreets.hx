@@ -13,6 +13,7 @@ import objects.Note;
 
 import cutscenes.CutsceneHandler;
 
+@:dox(hide)
 enum NeneState
 {
 	STATE_DEFAULT;
@@ -22,6 +23,7 @@ enum NeneState
 	STATE_LOWER;
 }
 
+@:dox(hide)
 class PhillyStreets extends BaseStage
 {
 	final MIN_BLINK_DELAY:Int = 3;

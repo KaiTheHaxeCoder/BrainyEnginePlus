@@ -2,6 +2,7 @@ package states.stages;
 
 import states.stages.objects.*;
 
+@:dox(hide)
 class Mall extends BaseStage
 {
 	var upperBoppers:BGSprite;
