@@ -35,6 +35,8 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 	public var script:HScript;
 	public var scriptName:String;
 
+	public static var instance:MusicBeatState;
+
 	#if HSCRIPT_ALLOWED
 	public function reloadScripts()
 	{
@@ -46,6 +48,7 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 	#end
 	override public function new(?nameOver:String)
 	{
+		instance = this;
 		super();
 		#if HSCRIPT_ALLOWED
 		if (nameOver == null)
@@ -204,6 +207,18 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 	@:dox(hide)
 	private static function _switchState(nextState:FlxState)
 	{
+		var stateEvent = new StateSwitchEvent();
+		stateEvent.nextState = nextState;
+		if (instance.script != null)
+		{
+			if (instance.script.exists('onStateSwitch'))
+				instance.script.call('onStateSwitch', [stateEvent]);
+			if (stateEvent.cancelled)
+				return;
+		}
+
+		nextState = stateEvent.nextState;
+
 		var stateName = Scripting.getClassName(nextState);
 		ScriptedStateHandler.curState = stateName;
 		var data = StateData.loadStateData(Scripting.getClassName(nextState));

@@ -1,5 +1,7 @@
 package scripting.events;
 
+import flixel.FlxState;
+
 /**
     Base Class for Script Events, doesn't really do anything by itself, but can be canceled.
 **/
@@ -78,4 +80,15 @@ class StepHitEvent extends ScriptEvent
 
     public var curDecStep:Float;
     public var curDecBeat:Float;
+}
+
+/**
+    Event used for onStateSwitch
+**/
+class StateSwitchEvent extends ScriptEvent
+{
+    /**
+        State being switched to
+    **/
+    public var nextState:FlxState;
 }
