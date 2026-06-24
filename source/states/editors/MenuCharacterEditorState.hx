@@ -184,7 +184,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		#end
 	}
 
-	public function UIEvent(id:String, sender:Dynamic) {
+	override public function UIEvent(id:String, sender:Dynamic) {
 		if(id == PsychUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;
 

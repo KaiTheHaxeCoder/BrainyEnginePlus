@@ -339,7 +339,7 @@ class NoteSplashDebugState extends MusicBeatState implements PsychUIEventHandler
 		#end
 	}
 	
-	public function UIEvent(id:String, sender:Dynamic)
+	override public function UIEvent(id:String, sender:Dynamic)
 	{
 		if (id == PsychUINumericStepper.CHANGE_EVENT && (sender is PsychUINumericStepper))
 		{

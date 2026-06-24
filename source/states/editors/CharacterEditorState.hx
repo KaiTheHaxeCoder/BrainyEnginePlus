@@ -703,7 +703,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		tab_group.add(saveCharacterButton);
 	}
 
-	public function UIEvent(id:String, sender:Dynamic) {
+	override public function UIEvent(id:String, sender:Dynamic) {
 		//trace(id, sender);
 		if(id == PsychUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;

@@ -70,6 +70,9 @@ class Main extends Sprite
 
 	public function new()
 	{
+		#if !HSCRIPT_ALLOWED
+		Macros.print('yeah bro you might be in for some shit you shouldn\'t\'ve turned off hscript lol');
+		#end
 		super();
 
 		#if (cpp && windows)

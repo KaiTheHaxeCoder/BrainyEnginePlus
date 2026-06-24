@@ -7,9 +7,11 @@ import objects.Character;
 import states.MainMenuState;
 import states.FreeplayState;
 
+import backend.StateData;
+
 class MasterEditorMenu extends MusicBeatState
 {
-	var options:Array<String> = [
+	public var options:Array<String> = [
 		'Chart Editor',
 		'Character Editor',
 		'Stage Editor',
@@ -20,6 +22,9 @@ class MasterEditorMenu extends MusicBeatState
 		'Note Splash Editor',
 		'PlayState Rewrite Preview'
 	];
+
+	public var data:Map<String, StateData> = new Map();
+	public var names:Map<String, String> = new Map();
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
 
@@ -27,8 +32,43 @@ class MasterEditorMenu extends MusicBeatState
 	private var curDirectory = 0;
 	private var directoryTxt:FlxText;
 
+	private function loadFromDir(dir:String)
+	{
+		var filesInDir = FileSystem.readDirectory(dir);
+
+		if (filesInDir == null)
+			return;
+		for (file in filesInDir)
+		{
+			if (file.toLowerCase().endsWith('.json'))
+			{
+				file = file.replace('.json', '');
+				var curData = StateData.loadStateData(file);
+				if (curData.editorData != null)
+					if (curData.editorData.isEditor)
+					{
+						data.set(curData.editorData.editorName, curData);
+						names.set(curData.editorData.editorName, file);
+					}
+			}
+		}
+	}
+
 	override function create()
 	{
+
+        #if MODS_ALLOWED
+        for (dir in Mods.getModDirectories())
+		{
+			loadFromDir(dir);
+		}
+		#end
+
+		loadFromDir('assets/shared/states');
+
+		for (d in data)
+			options.push(d.editorData.editorName);
+            
 		FlxG.camera.bgColor = FlxColor.BLACK;
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
@@ -124,6 +164,8 @@ class MasterEditorMenu extends MusicBeatState
 					MusicBeatState.switchState(new NoteSplashEditorState());
 				case 'PlayState Rewrite Preview':
 					LoadingState.loadAndSwitchState(new states.PlayStateRewrite({songName: "Bopeebo", difficulty: 1}), false);
+				default:
+					ScriptedStateHandler.switchState(names.get(options[curSelected]));
 			}
 			FlxG.sound.music.volume = 0;
 			FreeplayState.destroyFreeplayVocals();

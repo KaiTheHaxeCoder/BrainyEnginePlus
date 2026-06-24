@@ -4751,7 +4751,7 @@ class ChartingState extends MusicBeatState implements PsychUIEventHandler.PsychU
 		loadSection();
 	}
 
-	public function UIEvent(id:String, sender:Dynamic)
+	override public function UIEvent(id:String, sender:Dynamic)
 	{
 		//trace(id, sender);
 		switch(id)

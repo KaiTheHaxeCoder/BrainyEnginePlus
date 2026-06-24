@@ -236,7 +236,7 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 		#end
 	}
 
-	public function UIEvent(id:String, sender:Dynamic) {
+	override public function UIEvent(id:String, sender:Dynamic) {
 		if(id == PsychUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;
 

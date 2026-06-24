@@ -327,7 +327,7 @@ class WeekEditorState extends MusicBeatState implements PsychUIEventHandler.Psyc
 		#end
 	}
 	
-	public function UIEvent(id:String, sender:Dynamic) {
+	override public function UIEvent(id:String, sender:Dynamic) {
 		if(id == PsychUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;
 
@@ -629,7 +629,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 		add(saveWeekButton);
 	}
 	
-	public function UIEvent(id:String, sender:Dynamic)
+	override public function UIEvent(id:String, sender:Dynamic)
 	{
 		if(id == PsychUICheckBox.CLICK_EVENT)
 			WeekEditorState.unsavedProgress = true;

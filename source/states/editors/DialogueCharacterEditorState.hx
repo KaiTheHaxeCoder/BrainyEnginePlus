@@ -412,7 +412,7 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 		DialogueBoxPsych.updateBoxOffsets(box);
 	}
 
-	public function UIEvent(id:String, sender:Dynamic) {
+	override public function UIEvent(id:String, sender:Dynamic) {
 		//trace(id, sender);
 		if(id == PsychUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;

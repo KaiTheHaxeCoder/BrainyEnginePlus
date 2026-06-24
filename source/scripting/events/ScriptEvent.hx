@@ -44,7 +44,7 @@ class ScriptEvent
 }
 
 /**
-    Script Event used for onUpdate and similar callbacks.
+    Script Event used for onUpdate and similar callbacks. This is not cancellable.
 **/
 class UpdateEvent extends ScriptEvent
 {
@@ -58,7 +58,7 @@ class UpdateEvent extends ScriptEvent
 }
 
 /**
-    Script Event used for onStepHit and similar callbacks
+    Script Event used for onStepHit and similar callbacks. This is not cancellable.
 **/
 class StepHitEvent extends ScriptEvent
 {
@@ -91,4 +91,18 @@ class StateSwitchEvent extends ScriptEvent
         State being switched to
     **/
     public var nextState:FlxState;
+}
+
+class UIScriptEvent extends ScriptEvent
+{
+    public var id:String;
+    public var sender:Dynamic;
+
+    public override function new(id:String, sender:Dynamic)
+    {
+        super();
+
+        this.id = id;
+        this.sender = sender;
+    }
 }

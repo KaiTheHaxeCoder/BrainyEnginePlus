@@ -1315,7 +1315,7 @@ class StageEditorState extends MusicBeatState implements PsychUIEventHandler.Psy
 		}
 	}
 
-	public function UIEvent(id:String, sender:Dynamic)
+	override public function UIEvent(id:String, sender:Dynamic)
 	{
 		switch(id)
 		{

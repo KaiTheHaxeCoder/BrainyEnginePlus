@@ -1,5 +1,6 @@
 package backend;
 
+import backend.ui.PsychUIEventHandler.PsychUIEvent;
 import flixel.FlxState;
 import backend.PsychCamera;
 import backend.StateData;
@@ -8,7 +9,7 @@ import scripting.*;
 import scripting.helpers.*;
 import scripting.events.ScriptEvent;
 
-class MusicBeatState extends FlxState implements scripting.interfaces.IScriptable
+class MusicBeatState extends FlxState implements scripting.interfaces.IScriptable implements PsychUIEvent
 {
 	public var scripts:Map<String, HScript> = new Map();
 	private var curSection:Int = 0;
@@ -150,6 +151,8 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 
 	override public function destroy()
 	{
+		FlxG.camera.bgColor = FlxColor.BLACK;
+
 		var destroyEvent:ScriptEvent = new ScriptEvent();
 		call('onDestroy', [destroyEvent]);
 		if (destroyEvent.cancelled == false)
@@ -321,6 +324,13 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 		var val:Null<Float> = 4;
 		if(PlayState.SONG != null && PlayState.SONG.notes[curSection] != null) val = PlayState.SONG.notes[curSection].sectionBeats;
 		return val == null ? 4 : val;
+	}
+
+	public function UIEvent(id:String, sender:Dynamic)
+	{
+		var event = new UIScriptEvent(id, sender);
+	
+		call('UIEvent', [event]);
 	}
 }
 
