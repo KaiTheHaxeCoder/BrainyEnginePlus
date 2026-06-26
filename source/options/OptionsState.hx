@@ -9,65 +9,65 @@ import options.Option;
 
 class OptionsState extends MusicBeatState implements PsychUIEvent
 {
-	public static var onPlayState:Bool = false;
-	public static var instance:OptionsState;
+    public static var onPlayState:Bool = false;
+    public static var instance:OptionsState;
 
-	public var bg:FlxSprite;
+    public var bg:FlxSprite;
 
-	public var box:PsychUIBox;
+    public var box:PsychUIBox;
 
-	override public function new()
-	{
-		instance = this;
-		super();
-	}
+    override public function new()
+    {
+        instance = this;
+        super();
+    }
 
-	override public function createPost()
-	{
-		super.createPost();
+    override public function createPost()
+    {
+        super.createPost();
 
-		FlxG.mouse.visible = true;
+        FlxG.mouse.visible = true;
 
-		bg = new FlxSprite(0, 0, Paths.image('menuDesat'));
-		bg.color = 0x9AFFF5; 
-		bg.screenCenter();
+        bg = new FlxSprite(0, 0, Paths.image('menuDesat'));
+        bg.color = 0x9AFFF5; 
+        bg.screenCenter();
 
-		add(bg);
+        add(bg);
 
-		box = new PsychUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals']);
-		box.canMove = false;
-		box.canMinimize = false;
-		box.screenCenter();
+        box = new PsychUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals']);
+        box.canMove = false;
+        box.canMinimize = false;
+        box.screenCenter();
 
-		add(box);
+        add(box);
 
-		createGameplayMenu();
-		createGraphicsMenu();
-		createVisualsMenu();
-	}
+        createGameplayMenu();
+        createGraphicsMenu();
+        createVisualsMenu();
+    }
 
-	override public function update(elapsed:Float)
-	{
-		if (controls.BACK)
-		{
-			if (onPlayState)
-				MusicBeatState.switchState(new PlayState());
-			else
-				MusicBeatState.switchState(new MainMenuState());
-		}
-		
-		super.update(elapsed);
-	}
+    override public function update(elapsed:Float)
+    {
+        if (controls.BACK)
+        {
+            if (onPlayState)
+                MusicBeatState.switchState(new PlayState());
+            else
+                MusicBeatState.switchState(new MainMenuState());
+        }
+        
+        super.update(elapsed);
+    }
 
-	override function destroy()
-	{
-		ClientPrefs.saveSettings();
-		super.destroy();
-		FlxG.mouse.visible = false;
-	}
+    override function destroy()
+    {
+        ClientPrefs.saveSettings();
+        super.destroy();
+        FlxG.mouse.visible = false;
+    }
 
 
-	var downscroll:OptionSprite;
+    var downscroll:OptionSprite;
     var middlescroll:OptionSprite;
     var opponentNotes:OptionSprite;
     var ghostTapping:OptionSprite;
@@ -121,35 +121,35 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         tab.add(hitsoundVolume);
         objY += spacing;
 
-        ratingOffset = new OptionSprite(objX, objY, 'Rating Offset', 'ratingOffset', 'int', 'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.', {min: -30, max: 30, step: 1});
+        ratingOffset = new OptionSprite(objX, objY, 'Rating Offset', 'ratingOffset', 'int', 'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.', {min: -30, max: 30, step: 1, decimals: 0});
         tab.add(ratingOffset);
         objY += spacing;
 
-        sickWindow = new OptionSprite(objX, objY, 'Sick! Hit Window', 'sickWindow', 'float', 'Changes the amount of time you have\nfor hitting a "Sick!" in milliseconds.', {min: 15, max: 45, step: 0.1});
+        sickWindow = new OptionSprite(objX, objY, 'Sick! Hit Window', 'sickWindow', 'float', 'Changes the amount of time you have\nfor hitting a "Sick!" in milliseconds.', {min: 15, max: 45, step: 0.1, decimals: 1});
         tab.add(sickWindow);
         objY += spacing;
 
-        goodWindow = new OptionSprite(objX, objY, 'Good Hit Window', 'goodWindow', 'float', 'Changes the amount of time you have\nfor hitting a "Good" in milliseconds.', {min: 15, max: 90, step: 0.1});
+        goodWindow = new OptionSprite(objX, objY, 'Good Hit Window', 'goodWindow', 'float', 'Changes the amount of time you have\nfor hitting a "Good" in milliseconds.', {min: 15, max: 90, step: 0.1, decimals: 1});
         tab.add(goodWindow);
         objY += spacing;
 
-        badWindow = new OptionSprite(objX, objY, 'Bad Hit Window', 'badWindow', 'float', 'Changes the amount of time you have\nfor hitting a "Bad" in milliseconds.', {min: 15, max: 135, step: 0.1});
+        badWindow = new OptionSprite(objX, objY, 'Bad Hit Window', 'badWindow', 'float', 'Changes the amount of time you have\nfor hitting a "Bad" in milliseconds.', {min: 15, max: 135, step: 0.1, decimals: 1});
         tab.add(badWindow);
         objY += spacing;
 
-        safeFrames = new OptionSprite(objX, objY, 'Safe Frames', 'safeFrames', 'float', 'Changes how many frames you have for\nhitting a note earlier or late.', {min: 0, max: 10, step: 1});
+        safeFrames = new OptionSprite(objX, objY, 'Safe Frames', 'safeFrames', 'float', 'Changes how many frames you have for\nhitting a note earlier or late.', {min: 0, max: 10, step: 1, decimals: 0});
         tab.add(safeFrames);
 
-		objY += spacing;
+        objY += spacing;
 
-		var controls = new PsychUIButton(objX, objY, 'Open Controls Menu', function() {
-			box.active = false;
-			openSubState(new ControlsSubState());
-		}, 160);
-		tab.add(controls);
+        var controls = new PsychUIButton(objX, objY, 'Open Controls Menu', function() {
+            box.active = false;
+            openSubState(new ControlsSubState());
+        }, 160);
+        tab.add(controls);
     }
 
-	var lowQuality:OptionSprite;
+    var lowQuality:OptionSprite;
     var antiAliasing:OptionSprite;
     var shaders:OptionSprite;
     var cacheOnGPU:OptionSprite;
@@ -179,7 +179,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         objY += spacing;
 
         #if !html5
-        framerate = new OptionSprite(objX, objY, 'Framerate', 'framerate', 'int', "Pretty self explanatory, isn't it?", {min: 60, max: 240, step: 1});
+        framerate = new OptionSprite(objX, objY, 'Framerate', 'framerate', 'int', "Pretty self explanatory, isn't it?", {min: 60, max: 240, step: 1, decimals: 0});
         tab.add(framerate);
         #end
     }
@@ -222,7 +222,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         splashSkinOpt = new OptionSprite(objX, objY, 'Note Splashes:', 'splashSkin', 'string', "Select your prefered Note Splash variation.", {options: noteSplashesArray});
         objY += spacing;
 
-        splashAlphaOpt = new OptionSprite(objX, objY, 'Note Splash Opacity', 'splashAlpha', 'percent', 'How much transparent should the Note Splashes be.', {min: 0.0, max: 1.0, step: 0.1});
+        splashAlphaOpt = new OptionSprite(objX, objY, 'Note Splash Opacity', 'splashAlpha', 'percent', 'How much transparent should the Note Splashes be.', {min: 0.0, max: 1.0, step: 0.1, decimals: 1});
         tab.add(splashAlphaOpt);
         objY += spacing;
 
@@ -246,7 +246,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         tab.add(scoreTextZoom);
         objY += spacing;
 
-        healthBarOpacity = new OptionSprite(objX, objY, 'Health Bar Opacity', 'healthBarAlpha', 'percent', 'How much transparent should the health bar and icons be.', {min: 0.0, max: 1.0, step: 0.1});
+        healthBarOpacity = new OptionSprite(objX, objY, 'Health Bar Opacity', 'healthBarAlpha', 'percent', 'How much transparent should the health bar and icons be.', {min: 0.0, max: 1.0, step: 0.1, decimals: 1});
         tab.add(healthBarOpacity);
         objY += spacing;
 
@@ -274,37 +274,37 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         comboStacking = new OptionSprite(objX, objY, 'Combo Stacking', 'comboStacking', 'bool', "If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read");
         tab.add(comboStacking);
 
-		objY += spacing;
+        objY += spacing;
 
-		var noteColors = new PsychUIButton(objX, objY, 'Open Note Colors Menu', function() {
-			box.active = false;
-			openSubState(new NotesColorSubState());
-		}, 160);
-		tab.add(noteColors);
+        var noteColors = new PsychUIButton(objX, objY, 'Open Note Colors Menu', function() {
+            box.active = false;
+            openSubState(new NotesColorSubState());
+        }, 160);
+        tab.add(noteColors);
 
-		objY += spacing;
+        objY += spacing;
 
-		var offsetMenu = new PsychUIButton(objX, objY, 'Open Offset Menu', function() {
-			MusicBeatState.switchState(new NoteOffsetState());
-		}, 160);
-		tab.add(offsetMenu);
+        var offsetMenu = new PsychUIButton(objX, objY, 'Open Offset Menu', function() {
+            MusicBeatState.switchState(new NoteOffsetState());
+        }, 160);
+        tab.add(offsetMenu);
 
-		tab.add(pauseMusic);
-		tab.add(splashSkinOpt);
-		tab.add(noteSkinOpt);
+        tab.add(pauseMusic);
+        tab.add(splashSkinOpt);
+        tab.add(noteSkinOpt);
     }
 
-	override public function UIEvent(id:String, sender:Dynamic) 
-	{
-		super.UIEvent(id, sender);
+    override public function UIEvent(id:String, sender:Dynamic) 
+    {
+        super.UIEvent(id, sender);
 
-		switch (id)
-		{
-			case PsychUISlider.CHANGE_EVENT:
-				if (sender == hitsoundVolume)
-				{
-					FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
-				}
-		}
-	}
+        switch (id)
+        {
+            case PsychUISlider.CHANGE_EVENT:
+                if (sender == hitsoundVolume)
+                {
+                    FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
+                }
+        }
+    }
 }

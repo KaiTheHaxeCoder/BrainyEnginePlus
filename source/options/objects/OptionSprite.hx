@@ -1,7 +1,7 @@
 package options.objects;
 
-import flxanimate.data.SpriteMapData.FlxSparrow;
 import backend.ui.*;
+import options.objects.OptionModal;
 
 /**
     Crash course on PARAMETERS
@@ -9,6 +9,7 @@ import backend.ui.*;
     types int, float, percent and slider all have:
     `min:Float`
     `max:Float`
+    `decimals:Float`
     All of these types besides for slider have
     `step:Float`
     
@@ -25,7 +26,7 @@ class OptionSprite extends FlxSpriteGroup
     public var value(get, set):Dynamic;
     public var parameters:Dynamic;
 
-    public var desc:String; //only used by OptionsState lol
+    public var desc:String;
 
     private var text:FlxText;
     private var obj:Dynamic;
@@ -81,9 +82,7 @@ class OptionSprite extends FlxSpriteGroup
                 obj.set_checked(cast(value, Bool));
 
             case 'int', 'float', 'percent':
-                obj = new PsychUINumericStepper(objX, 0, parameters?.step, 0, parameters?.min, parameters?.max);
-
-                obj.isPercent = (type == 'percent');
+                obj = new PsychUINumericStepper(objX, 0, parameters?.step, 0, parameters?.min, parameters?.max, parameters?.decimals, 60, (type == 'percent'));
                 
                 if (type == 'int')
                     obj.set_value(cast(value, Int));
