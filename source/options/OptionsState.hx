@@ -34,7 +34,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 
         add(bg);
 
-        box = new PsychUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals', 'Misc']);
+        box = new PsychUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals', 'Misc', 'Experiments']);
         box.canMove = false;
         box.canMinimize = false;
         box.screenCenter();
@@ -45,6 +45,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         createGraphicsMenu();
         createVisualsMenu();
 		createMiscMenu();
+        createExperimentsTab();
     }
 
     override public function update(elapsed:Float)
@@ -274,6 +275,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
     var pauseMusic:OptionSprite;
     var checkUpdatesOpt:OptionSprite;
     var discordRpcOpt:OptionSprite;
+    var album:OptionSprite;
 
 	function createMiscMenu()
 	{
@@ -308,12 +310,25 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         objY += spacing;
         #end
 
-        discordRpcOpt = new OptionSprite(objX, objY, 'Show Album in Freeplay', 'showAlbum', 'bool', "If checked, shows albums in Freeplay.");
-        tab.add(discordRpcOpt);
+        album = new OptionSprite(objX, objY, 'Show Album in Freeplay', 'showAlbum', 'bool', "If checked, shows albums in Freeplay.");
+        tab.add(album);
         objY += spacing;
 		
 		tab.add(pauseMusic);
 	}
+
+    function createExperimentsTab()
+    {
+        var tab = box.getTab('Experiments').menu;
+
+        var objX = 10;
+        var objY = 10;
+        var spacing = 45;
+
+        var text = new OptionText(objX, objY, "In the future, this tab will have some experimental settings to use at your own risk.");
+        spacing += 45;
+        tab.add(text);
+    }
 
     override public function UIEvent(id:String, sender:Dynamic) 
     {
@@ -334,5 +349,13 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         }
 
 		ClientPrefs.saveSettings();
+    }
+}
+
+class OptionText extends FlxText
+{
+    override public function new(X, Y, Text)
+    {
+        super(X, Y, (OptionsState.instance.box.width - X - 10), Text);
     }
 }
