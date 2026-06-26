@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "**/assets/*.hx": "haxe-script",
+    "**/export/*.hx": "haxe-script",
+    "**/source/*.hx": "haxe"
+  }
+}

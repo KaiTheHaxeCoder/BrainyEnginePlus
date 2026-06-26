@@ -5,6 +5,8 @@ import flixel.addons.display.FlxBackdrop;
 import flixel.addons.display.FlxGridOverlay;
 import objects.AttachedSprite;
 
+import options.OptionsState;
+
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
@@ -521,5 +523,11 @@ class ControlsSubState extends MusicBeatSubstate
 		}
 		selectSpr.sprTracker = grpBlacks.members[Math.floor(curSelected * 2) + (curAlt ? 1 : 0)];
 		selectSpr.visible = (selectSpr.sprTracker != null);
+	}
+
+	override function destroy()
+	{
+		OptionsState.instance.box.active = true;
+		super.destroy();
 	}
 }

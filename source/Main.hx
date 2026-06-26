@@ -226,7 +226,7 @@ class Main extends Sprite
 		dateNow = dateNow.replace(" ", "_");
 		dateNow = dateNow.replace(":", "'");
 
-		path = "./crash/" + "PsychEngine_" + dateNow + ".txt";
+		path = "./.crash/" + "BrainyEngine+_" + dateNow + ".txt";
 
 		for (stackItem in callStack)
 		{
@@ -247,8 +247,8 @@ class Main extends Sprite
 		#end
 		errMsg += "\n\n> Crash Handler written by: sqirra-rng";
 
-		if (!FileSystem.exists("./crash/"))
-			FileSystem.createDirectory("./crash/");
+		if (!FileSystem.exists("./.crash/"))
+			FileSystem.createDirectory("./.crash/");
 
 		File.saveContent(path, errMsg + "\n");
 
