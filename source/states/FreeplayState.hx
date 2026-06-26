@@ -21,6 +21,8 @@ class FreeplayState extends MusicBeatState
 {
 	var songs:Array<SongMetadata> = [];
 
+	var album:FlxSprite;
+
 	var selector:FlxText;
 	private static var curSelected:Int = 0;
 	var lerpSelected:Float = 0;
@@ -93,12 +95,19 @@ class FreeplayState extends MusicBeatState
 			WeekData.setDirectoryFromWeek(leWeek);
 			for (song in leWeek.songs)
 			{
+				
 				var colors:Array<Int> = song[2];
 				if(colors == null || colors.length < 3)
 				{
 					colors = [146, 113, 253];
 				}
 				addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
+
+				Mods.currentModDirectory = songs[curSelected].folder;
+				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
+				Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+
+				var album = (PlayState.SONG?.album != null) ? PlayState.SONG?.album : 'placeholder';
 			}
 		}
 		Mods.loadTopMod();
@@ -185,11 +194,23 @@ class FreeplayState extends MusicBeatState
 		
 		player = new MusicPlayer(this);
 		add(player);
+
+		album = new FlxSprite();
+		album.scale.set(1.25, 1.25);
+		album.angle =  5;
+		album.screenCenter(Y);
+		album.x = FlxG.width - 350;
+		loadAlbum('placeholder');
+
+		add(album);
 		
 		changeSelection();
 		updateTexts();
 		super.create();
 	}
+
+	inline function loadAlbum(albumName:String)
+		album.loadGraphic(Paths.image('albumRoll/$albumName'));
 
 	override function closeSubState()
 	{
@@ -198,9 +219,9 @@ class FreeplayState extends MusicBeatState
 		super.closeSubState();
 	}
 
-	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int)
+	public function addSong(songName:String, weekNum:Int, songCharacter:String, color:Int, album:String = 'placeholder')
 	{
-		songs.push(new SongMetadata(songName, weekNum, songCharacter, color));
+		songs.push(new SongMetadata(songName, weekNum, songCharacter, color, album));
 	}
 
 	function weekIsLocked(name:String):Bool
@@ -541,6 +562,12 @@ class FreeplayState extends MusicBeatState
 		
 		Mods.currentModDirectory = songs[curSelected].folder;
 		PlayState.storyWeek = songs[curSelected].week;
+		var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
+		Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+
+		var album = (PlayState.SONG?.album != null) ? PlayState.SONG?.album : 'placeholder';
+		loadAlbum(album);
+
 		Difficulty.loadFromWeek();
 		
 		var savedDiff:String = songs[curSelected].lastDifficulty;
@@ -616,13 +643,16 @@ class SongMetadata
 	public var folder:String = "";
 	public var lastDifficulty:String = null;
 
-	public function new(song:String, week:Int, songCharacter:String, color:Int)
+	public var album:String = 'placeholder';
+
+	public function new(song:String, week:Int, songCharacter:String, color:Int, ?album:String = 'placeholder')
 	{
 		this.songName = song;
 		this.week = week;
 		this.songCharacter = songCharacter;
 		this.color = color;
 		this.folder = Mods.currentModDirectory;
+		this.album = album;
 		if(this.folder == null) this.folder = '';
 	}
 }

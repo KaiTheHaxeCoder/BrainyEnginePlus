@@ -30,6 +30,8 @@ typedef SwagSong =
 
 	@:optional var arrowSkin:String;
 	@:optional var splashSkin:String;
+
+	@:optional var album:String;
 }
 
 typedef SwagSection =

@@ -1,6 +1,7 @@
 {
 	"song": {
 		"player1": "bf",
+		"album": "volume1",
 		"events": [],
 		"gfVersion": null,
 		"player2": "spooky",
