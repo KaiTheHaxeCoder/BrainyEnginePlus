@@ -34,7 +34,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 
         add(bg);
 
-        box = new PsychUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals']);
+        box = new PsychUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals', 'Misc']);
         box.canMove = false;
         box.canMinimize = false;
         box.screenCenter();
@@ -44,6 +44,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         createGameplayMenu();
         createGraphicsMenu();
         createVisualsMenu();
+		createMiscMenu();
     }
 
     override public function update(elapsed:Float)
@@ -193,10 +194,6 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
     var cameraZoomOnBeat:OptionSprite;
     var scoreTextZoom:OptionSprite;
     var healthBarOpacity:OptionSprite;
-    var fpsCounter:OptionSprite;
-    var pauseMusic:OptionSprite;
-    var checkUpdatesOpt:OptionSprite;
-    var discordRpcOpt:OptionSprite;
     var comboStacking:OptionSprite;
 
     function createVisualsMenu()
@@ -231,7 +228,6 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         objY += spacing;
 
         timeBarTypeOpt = new OptionSprite(objX, objY, 'Time Bar:', 'timeBarType', 'string', "What should the Time Bar display?", {options: ['Time Left', 'Time Elapsed', 'Song Name', 'Disabled']});
-        tab.add(timeBarTypeOpt);
         objY += spacing;
 
         fluffText = new OptionSprite(objX, objY, 'Flashing Lights', 'flashing', 'bool', "Uncheck this if you're sensitive to flashing lights!");
@@ -249,27 +245,6 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         healthBarOpacity = new OptionSprite(objX, objY, 'Health Bar Opacity', 'healthBarAlpha', 'percent', 'How much transparent should the health bar and icons be.', {min: 0.0, max: 1.0, step: 0.1, decimals: 1});
         tab.add(healthBarOpacity);
         objY += spacing;
-
-        #if !mobile
-        fpsCounter = new OptionSprite(objX, objY, 'FPS Counter', 'showFPS', 'bool', 'If unchecked, hides FPS Counter.');
-        tab.add(fpsCounter);
-        objY += spacing;
-        #end
-
-        pauseMusic = new OptionSprite(objX, objY, 'Pause Music:', 'pauseMusic', 'string', "What song do you prefer for the Pause Screen?", {options: ['None', 'Tea Time', 'Breakfast', 'Breakfast (Pico)']});
-        objY += spacing;
-
-        #if CHECK_FOR_UPDATES
-        checkUpdatesOpt = new OptionSprite(objX, objY, 'Check for Updates', 'checkForUpdates', 'bool', 'On Release builds, turn this on to check for updates when you start the game.');
-        tab.add(checkUpdatesOpt);
-        objY += spacing;
-        #end
-
-        #if DISCORD_ALLOWED
-        discordRpcOpt = new OptionSprite(objX, objY, 'Discord Rich Presence', 'discordRPC', 'bool', "Uncheck this to prevent accidental leaks, it will hide the Application from your \"Playing\" box on Discord");
-        tab.add(discordRpcOpt);
-        objY += spacing;
-        #end
 
         comboStacking = new OptionSprite(objX, objY, 'Combo Stacking', 'comboStacking', 'bool', "If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read");
         tab.add(comboStacking);
@@ -289,10 +264,52 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         }, 160);
         tab.add(offsetMenu);
 
-        tab.add(pauseMusic);
+		tab.add(timeBarTypeOpt);
         tab.add(splashSkinOpt);
         tab.add(noteSkinOpt);
     }
+
+	var devMode:OptionSprite;
+	var fpsCounter:OptionSprite;
+    var pauseMusic:OptionSprite;
+    var checkUpdatesOpt:OptionSprite;
+    var discordRpcOpt:OptionSprite;
+
+	function createMiscMenu()
+	{
+		var tab = box.getTab('Misc').menu;
+
+        var objX = 10;
+        var objY = 10;
+        var spacing = 45;
+
+        devMode = new OptionSprite(objX, objY, 'Developer Mode', 'developerMode', 'bool', 'If checked, you have access to certain developer features used for making mods.');
+        tab.add(devMode);
+        objY += spacing;
+
+		#if !mobile
+        fpsCounter = new OptionSprite(objX, objY, 'FPS Counter', 'showFPS', 'bool', 'If unchecked, hides FPS Counter.');
+        tab.add(fpsCounter);
+        objY += spacing;
+        #end
+
+        pauseMusic = new OptionSprite(objX, objY, 'Pause Music:', 'pauseMusic', 'string', "What song do you prefer for the Pause Screen?", {options: ['None', 'Tea Time', 'Breakfast', 'Breakfast (Pico)']});
+        objY += spacing;
+
+        #if CHECK_FOR_UPDATES
+        checkUpdatesOpt = new OptionSprite(objX, objY, 'Check for Updates', 'checkForUpdates', 'bool', 'Turn this on to check for updates when you start the game.');
+        tab.add(checkUpdatesOpt);
+        objY += spacing;
+        #end
+
+        #if DISCORD_ALLOWED
+        discordRpcOpt = new OptionSprite(objX, objY, 'Discord Rich Presence', 'discordRPC', 'bool', "Uncheck this to prevent accidental leaks, it will hide the Application from your \"Playing\" box on Discord");
+        tab.add(discordRpcOpt);
+        objY += spacing;
+        #end
+		
+		tab.add(pauseMusic);
+	}
 
     override public function UIEvent(id:String, sender:Dynamic) 
     {
@@ -305,6 +322,13 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
                 {
                     FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
                 }
+
+			case PsychUICheckBox.CLICK_EVENT:
+				if (sender == fpsCounter)
+					if(Main.fpsVar != null)
+						Main.fpsVar.visible = ClientPrefs.data.showFPS;
         }
+
+		ClientPrefs.saveSettings();
     }
 }

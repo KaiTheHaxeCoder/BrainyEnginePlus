@@ -101,7 +101,7 @@ class OptionSprite extends FlxSpriteGroup
                     value = string;
                 });
 
-                obj.selectedLabel(cast(value, String));
+                obj.set_text(cast(value, String));
         }
 
         if (obj != null) add(obj);

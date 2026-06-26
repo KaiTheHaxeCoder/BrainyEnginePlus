@@ -144,6 +144,9 @@ class MusicBeatState extends FlxState implements scripting.interfaces.IScriptabl
 			stage.update(elapsed);
 		});
 
+		if (FlxG.keys.justPressed.F5 && ClientPrefs.data.developerMode)
+			resetState();
+
 		super.update(elapsed);
 
 		call('onUpdatePost', [updateEvent]);
