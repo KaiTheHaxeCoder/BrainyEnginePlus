@@ -202,6 +202,8 @@ class FreeplayState extends MusicBeatState
 		album.x = FlxG.width - 350;
 		loadAlbum('placeholder');
 
+		album.visible = ClientPrefs.data.showAlbum;
+
 		add(album);
 		
 		changeSelection();

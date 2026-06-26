@@ -307,6 +307,10 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         tab.add(discordRpcOpt);
         objY += spacing;
         #end
+
+        discordRpcOpt = new OptionSprite(objX, objY, 'Show Album in Freeplay', 'showAlbum', 'bool', "If checked, shows albums in Freeplay.");
+        tab.add(discordRpcOpt);
+        objY += spacing;
 		
 		tab.add(pauseMusic);
 	}

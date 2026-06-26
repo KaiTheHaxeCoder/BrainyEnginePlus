@@ -79,6 +79,7 @@ import states.TitleState;
 	public var language:String = 'en-US';
 
 	public var developerMode:Bool = false;
+	public var showAlbum:Bool = true;
 }
 
 class ClientPrefs {
