@@ -317,6 +317,8 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 		tab.add(pauseMusic);
 	}
 
+    var viz:OptionSprite;
+
     function createExperimentsTab()
     {
         var tab = box.getTab('Experiments').menu;
@@ -325,9 +327,15 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         var objY = 10;
         var spacing = 45;
 
-        var text = new OptionText(objX, objY, "In the future, this tab will have some experimental settings to use at your own risk.");
-        spacing += 45;
+        var text = new OptionText(objX, objY, "This tab contains some experimental settings to use at your own risk.");
+        objY += spacing;
         tab.add(text);
+
+        #if funkin.vis
+        viz = new OptionSprite(objX, objY, 'Visualizer (Not functional right now.)', 'viz', 'bool', "Adds a visualizer to the game!");
+        tab.add(viz);
+        objY += spacing;
+        #end
     }
 
     override public function UIEvent(id:String, sender:Dynamic) 

@@ -247,6 +247,10 @@ class PlayState extends MusicBeatState
 	var boyfriendIdleTime:Float = 0.0;
 	var boyfriendIdled:Bool = false;
 
+	#if funkin.vis
+	var viz:Visualizer;
+	#end
+
 	// Lua shit
 	#if LUA_ALLOWED public var luaArray:Array<FunkinLua> = []; #end
 	public static var instance:PlayState;
@@ -568,6 +572,14 @@ class PlayState extends MusicBeatState
 		comboGroup.cameras = [camHUD];
 
 		startingSong = true;
+
+		#if funkin.vis
+		if (ClientPrefs.data.viz)
+		{
+			viz = new Visualizer(0, 0);
+			add(viz);
+		}
+		#end
 
 		#if LUA_ALLOWED
 		for (notetype in noteTypes)

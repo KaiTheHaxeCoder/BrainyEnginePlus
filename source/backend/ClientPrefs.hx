@@ -80,6 +80,7 @@ import states.TitleState;
 
 	public var developerMode:Bool = false;
 	public var showAlbum:Bool = true;
+	public var viz:Bool = false;
 }
 
 class ClientPrefs {
