@@ -328,7 +328,7 @@ class OptionsState extends MusicBeatState implements BrainyUIEvent
         var objY = 10;
         var spacing = 45;
 
-        var text = new OptionText(objX, objY, "This tab contains some experimental settings to use at your own risk.");
+        var text = makeText(objX, objY, "This tab contains some experimental settings to use at your own risk.");
         objY += spacing;
         tab.add(text);
 
@@ -365,12 +365,7 @@ class OptionsState extends MusicBeatState implements BrainyUIEvent
 
 		ClientPrefs.saveSettings();
     }
-}
 
-class OptionText extends FlxText
-{
-    override public function new(X, Y, Text)
-    {
-        super(X, Y, (OptionsState.instance.box.width - X - 10), Text);
-    }
+    public inline static function makeText(X, Y, Text):FlxText
+        return new FlxText(X, Y, box.width - X - 10, Text);
 }
