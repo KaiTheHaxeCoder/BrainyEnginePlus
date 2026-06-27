@@ -14,7 +14,7 @@ import cutscenes.DialogueCharacter;
 
 import states.editors.content.Prompt;
 
-class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
+class DialogueCharacterEditorState extends MusicBeatState implements BrainyUIEventHandler.BrainyUIEvent
 {
 	var box:FlxSprite;
 	var daText:TypedAlphabet = null;
@@ -140,16 +140,16 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 		super.create();
 	}
 
-	var UI_typebox:PsychUIBox;
-	var UI_mainbox:PsychUIBox;
+	var UI_typebox:BrainyUIBox;
+	var UI_mainbox:BrainyUIBox;
 	function addEditorBox() {
-		UI_typebox = new PsychUIBox(900, FlxG.height - 230, 120, 180, ['Character Type']);
+		UI_typebox = new BrainyUIBox(900, FlxG.height - 230, 120, 180, ['Character Type']);
 		UI_typebox.scrollFactor.set();
 		UI_typebox.cameras = [camHUD];
 		addTypeUI();
 		add(UI_typebox);
 
-		UI_mainbox = new PsychUIBox(UI_typebox.x + UI_typebox.width + 10, FlxG.height - 300, 200, 250, ['Animations', 'Character']);
+		UI_mainbox = new BrainyUIBox(UI_typebox.x + UI_typebox.width + 10, FlxG.height - 300, 200, 250, ['Animations', 'Character']);
 		UI_mainbox.scrollFactor.set();
 		UI_mainbox.cameras = [camHUD];
 		addAnimationsUI();
@@ -159,11 +159,11 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 		lastTab = UI_mainbox.selectedName;
 	}
 
-	var characterTypeRadio:PsychUIRadioGroup;
+	var characterTypeRadio:BrainyUIRadioGroup;
 	function addTypeUI() {
 		var tab_group = UI_typebox.getTab('Character Type').menu;
 		
-		characterTypeRadio = new PsychUIRadioGroup(10, 20, ['Left', 'Center', 'Right'], 40);
+		characterTypeRadio = new BrainyUIRadioGroup(10, 20, ['Left', 'Center', 'Right'], 40);
 		characterTypeRadio.checked = 0;
 		characterTypeRadio.onClick = function() {
 			switch(characterTypeRadio.checked)
@@ -182,14 +182,14 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 
 	var curSelectedAnim:String;
 	var animationArray:Array<String> = [];
-	var animationDropDown:PsychUIDropDownMenu;
-	var animationInputText:PsychUIInputText;
-	var loopInputText:PsychUIInputText;
-	var idleInputText:PsychUIInputText;
+	var animationDropDown:BrainyUIDropDownMenu;
+	var animationInputText:BrainyUIInputText;
+	var loopInputText:BrainyUIInputText;
+	var idleInputText:BrainyUIInputText;
 	function addAnimationsUI() {
 		var tab_group = UI_mainbox.getTab('Animations').menu;
 
-		animationDropDown = new PsychUIDropDownMenu(10, 30, [''], function(id:Int, animation:String) {
+		animationDropDown = new BrainyUIDropDownMenu(10, 30, [''], function(id:Int, animation:String) {
 			if(character.dialogueAnimations.exists(animation)) {
 				ghostLoop.playAnim(animation);
 				ghostIdle.playAnim(animation, true);
@@ -205,11 +205,11 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 			}
 		});
 		
-		animationInputText = new PsychUIInputText(15, 85, 80, '', 8);
-		loopInputText = new PsychUIInputText(animationInputText.x, animationInputText.y + 35, 150, '', 8);
-		idleInputText = new PsychUIInputText(loopInputText.x, loopInputText.y + 40, 150, '', 8);
+		animationInputText = new BrainyUIInputText(15, 85, 80, '', 8);
+		loopInputText = new BrainyUIInputText(animationInputText.x, animationInputText.y + 35, 150, '', 8);
+		idleInputText = new BrainyUIInputText(loopInputText.x, loopInputText.y + 40, 150, '', 8);
 		
-		var addUpdateButton:PsychUIButton = new PsychUIButton(10, idleInputText.y + 30, "Add/Update", function() {
+		var addUpdateButton:BrainyUIButton = new BrainyUIButton(10, idleInputText.y + 30, "Add/Update", function() {
 			var theAnim:String = animationInputText.text.trim();
 			if(character.dialogueAnimations.exists(theAnim)) //Update
 			{
@@ -250,7 +250,7 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 			}
 		});
 		
-		var removeUpdateButton:PsychUIButton = new PsychUIButton(100, addUpdateButton.y, "Remove", function() {
+		var removeUpdateButton:BrainyUIButton = new BrainyUIButton(100, addUpdateButton.y, "Remove", function() {
 			for (i in 0...character.jsonFile.animations.length) {
 				var animArray:DialogueAnimArray = character.jsonFile.animations[i];
 				if(animArray != null && animArray.anim.trim() == animationInputText.text.trim()) {
@@ -297,19 +297,19 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 		animationDropDown.list = animationArray;
 	}
 
-	var imageInputText:PsychUIInputText;
-	var scaleStepper:PsychUINumericStepper;
-	var xStepper:PsychUINumericStepper;
-	var yStepper:PsychUINumericStepper;
+	var imageInputText:BrainyUIInputText;
+	var scaleStepper:BrainyUINumericStepper;
+	var xStepper:BrainyUINumericStepper;
+	var yStepper:BrainyUINumericStepper;
 	function addCharacterUI() {
 		var tab_group = UI_mainbox.getTab('Character').menu;
 
-		imageInputText = new PsychUIInputText(10, 30, 80, character.jsonFile.image, 8);
-		xStepper = new PsychUINumericStepper(imageInputText.x, imageInputText.y + 50, 10, character.jsonFile.position[0], -2000, 2000, 0);
-		yStepper = new PsychUINumericStepper(imageInputText.x + 80, xStepper.y, 10, character.jsonFile.position[1], -2000, 2000, 0);
-		scaleStepper = new PsychUINumericStepper(imageInputText.x, xStepper.y + 50, 0.05, character.jsonFile.scale, 0.1, 10, 2);
+		imageInputText = new BrainyUIInputText(10, 30, 80, character.jsonFile.image, 8);
+		xStepper = new BrainyUINumericStepper(imageInputText.x, imageInputText.y + 50, 10, character.jsonFile.position[0], -2000, 2000, 0);
+		yStepper = new BrainyUINumericStepper(imageInputText.x + 80, xStepper.y, 10, character.jsonFile.position[1], -2000, 2000, 0);
+		scaleStepper = new BrainyUINumericStepper(imageInputText.x, xStepper.y + 50, 0.05, character.jsonFile.scale, 0.1, 10, 2);
 
-		var noAntialiasingCheckbox:PsychUICheckBox = new PsychUICheckBox(scaleStepper.x + 80, scaleStepper.y, "No Antialiasing", 100);
+		var noAntialiasingCheckbox:BrainyUICheckBox = new BrainyUICheckBox(scaleStepper.x + 80, scaleStepper.y, "No Antialiasing", 100);
 		noAntialiasingCheckbox.checked = (character.jsonFile.no_antialiasing == true);
 		noAntialiasingCheckbox.onClick = function()
 		{
@@ -326,14 +326,14 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 		tab_group.add(scaleStepper);
 		tab_group.add(noAntialiasingCheckbox);
 
-		var reloadImageButton:PsychUIButton = new PsychUIButton(10, scaleStepper.y + 60, "Reload Image", function() {
+		var reloadImageButton:BrainyUIButton = new BrainyUIButton(10, scaleStepper.y + 60, "Reload Image", function() {
 			reloadCharacter();
 		});
 		
-		var loadButton:PsychUIButton = new PsychUIButton(reloadImageButton.x + 100, reloadImageButton.y, "Load Character", function() {
+		var loadButton:BrainyUIButton = new BrainyUIButton(reloadImageButton.x + 100, reloadImageButton.y, "Load Character", function() {
 			loadCharacter();
 		});
-		var saveButton:PsychUIButton = new PsychUIButton(loadButton.x, reloadImageButton.y - 25, "Save Character", function() {
+		var saveButton:BrainyUIButton = new BrainyUIButton(loadButton.x, reloadImageButton.y - 25, "Save Character", function() {
 			saveCharacter();
 		});
 		tab_group.add(reloadImageButton);
@@ -414,13 +414,13 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 
 	override public function UIEvent(id:String, sender:Dynamic) {
 		//trace(id, sender);
-		if(id == PsychUICheckBox.CLICK_EVENT)
+		if(id == BrainyUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;
 
-		if(id == PsychUIInputText.CHANGE_EVENT && sender == imageInputText) {
+		if(id == BrainyUIInputText.CHANGE_EVENT && sender == imageInputText) {
 			character.jsonFile.image = imageInputText.text;
 			unsavedProgress = true;
-		} else if(id == PsychUINumericStepper.CHANGE_EVENT && (sender is PsychUINumericStepper)) {
+		} else if(id == BrainyUINumericStepper.CHANGE_EVENT && (sender is BrainyUINumericStepper)) {
 			if(sender == scaleStepper) {
 				character.jsonFile.scale = scaleStepper.value;
 				reloadCharacter();
@@ -453,7 +453,7 @@ class DialogueCharacterEditorState extends MusicBeatState implements PsychUIEven
 			}
 		}
 
-		if(PsychUIInputText.focusOn == null)
+		if(BrainyUIInputText.focusOn == null)
 		{
 			ClientPrefs.toggleVolumeKeys(true);
 			if(FlxG.keys.justPressed.SPACE && UI_mainbox.selectedName == 'Character') {

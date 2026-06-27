@@ -1,6 +1,6 @@
 package backend;
 
-import backend.ui.PsychUIEventHandler.PsychUIEvent;
+import brainy.ui.BrainyUIEventHandler.BrainyUIEvent;
 import flixel.FlxState;
 import backend.PsychCamera;
 import backend.StateData;
@@ -9,7 +9,7 @@ import scripting.*;
 import scripting.helpers.*;
 import scripting.events.ScriptEvent;
 
-class MusicBeatState extends FlxState implements scripting.interfaces.IScriptable implements PsychUIEvent
+class MusicBeatState extends FlxState implements scripting.interfaces.IScriptable implements BrainyUIEvent
 {
 	public var scripts:Map<String, HScript> = new Map();
 	private var curSection:Int = 0;

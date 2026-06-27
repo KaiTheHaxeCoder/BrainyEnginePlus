@@ -34,7 +34,7 @@ import backend.Difficulty;
 import backend.Mods;
 import backend.Language;
 
-import backend.ui.*; //Psych-UI
+import brainy.ui.*; //Psych-UI
 
 import objects.Alphabet;
 import objects.BGSprite;

@@ -1,6 +1,6 @@
 package options.objects;
 
-import backend.ui.*;
+import brainy.ui.*;
 import options.objects.OptionModal;
 
 /**
@@ -18,7 +18,7 @@ import options.objects.OptionModal;
     the string type has 
     `options:Array<String`
 **/
-class OptionSprite extends FlxSpriteGroup
+class OptionSprite extends FlxSpriteGroup implements brainy.ui.BrainyUIEventHandler.BrainyUIEvent
 {
     public var name(default, set):String = 'Option';
     public var saveName:String = '';
@@ -74,7 +74,7 @@ class OptionSprite extends FlxSpriteGroup
         switch (type)
         {
             case 'bool':
-                obj = new PsychUICheckBox(objX, 0, '', function()
+                obj = new BrainyUICheckBox(objX, 0, '', function()
                 {
                     value = obj.checked;
                 });
@@ -82,21 +82,21 @@ class OptionSprite extends FlxSpriteGroup
                 obj.set_checked(cast(value, Bool));
 
             case 'int', 'float', 'percent':
-                obj = new PsychUINumericStepper(objX, 0, parameters?.step, 0, parameters?.min, parameters?.max, parameters?.decimals, 60, (type == 'percent'));
+                obj = new BrainyUINumericStepper(objX, 0, parameters?.step, 0, parameters?.min, parameters?.max, parameters?.decimals, 60, (type == 'percent'));
                 
                 if (type == 'int')
                     obj.set_value(cast(value, Int));
                 else
                     obj.set_value(cast(value, Float));
             case 'slider':
-                obj = new PsychUISlider(objX, 0, function(v:Float) {
+                obj = new BrainyUISlider(objX, 0, function(v:Float) {
                     value = v;
                 }, 0, parameters?.min, parameters?.max);
 
                 obj.set_value(cast(value, Float));
 
             case 'string':
-                obj = new PsychUIDropDownMenu(objX, 0, parameters?.options, function(v:Int, string:String)
+                obj = new BrainyUIDropDownMenu(objX, 0, parameters?.options, function(v:Int, string:String)
                 {
                     value = string;
                 });
@@ -106,5 +106,15 @@ class OptionSprite extends FlxSpriteGroup
 
         if (obj != null) add(obj);
         add(text);
+    }
+
+    public function UIEvent(id:String, sender:Dynamic)
+    {
+        switch (id)
+        {
+            case BrainyUINumericStepper.CHANGE_EVENT:
+                if (sender == obj)
+                    value = obj?.value;
+        }
     }
 }

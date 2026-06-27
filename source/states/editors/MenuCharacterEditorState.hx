@@ -11,7 +11,7 @@ import objects.MenuCharacter;
 import states.editors.content.Prompt;
 import states.editors.content.PsychJsonPrinter;
 
-class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
+class MenuCharacterEditorState extends MusicBeatState implements BrainyUIEventHandler.BrainyUIEvent
 {
 	var grpWeekCharacters:FlxTypedGroup<MenuCharacter>;
 	var characterFile:MenuCharacterFile = null;
@@ -67,28 +67,28 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		super.create();
 	}
 
-	var UI_typebox:PsychUIBox;
-	var UI_mainbox:PsychUIBox;
+	var UI_typebox:BrainyUIBox;
+	var UI_mainbox:BrainyUIBox;
 	function addEditorBox() {
-		UI_typebox = new PsychUIBox(100, FlxG.height - 230, 120, 180, ['Character Type']);
+		UI_typebox = new BrainyUIBox(100, FlxG.height - 230, 120, 180, ['Character Type']);
 		UI_typebox.scrollFactor.set();
 		addTypeUI();
 		add(UI_typebox);
 
 		
-		UI_mainbox = new PsychUIBox(FlxG.width - 340, FlxG.height - 265, 240, 215, ['Character']);
+		UI_mainbox = new BrainyUIBox(FlxG.width - 340, FlxG.height - 265, 240, 215, ['Character']);
 		UI_mainbox.scrollFactor.set();
 		addCharacterUI();
 		add(UI_mainbox);
 
-		var loadButton:PsychUIButton = new PsychUIButton(0, 480, "Load Character", function() {
+		var loadButton:BrainyUIButton = new BrainyUIButton(0, 480, "Load Character", function() {
 			loadCharacter();
 		});
 		loadButton.screenCenter(X);
 		loadButton.x -= 60;
 		add(loadButton);
 	
-		var saveButton:PsychUIButton = new PsychUIButton(0, 480, "Save Character", function() {
+		var saveButton:BrainyUIButton = new BrainyUIButton(0, 480, "Save Character", function() {
 			saveCharacter();
 		});
 		saveButton.screenCenter(X);
@@ -96,37 +96,37 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		add(saveButton);
 	}
 
-	var characterTypeRadio:PsychUIRadioGroup;
+	var characterTypeRadio:BrainyUIRadioGroup;
 	function addTypeUI() {
 		var tab_group = UI_typebox.getTab('Character Type').menu;
 
-		characterTypeRadio = new PsychUIRadioGroup(10, 20, ['Opponent', 'Boyfriend', 'Girlfriend'], 40);
+		characterTypeRadio = new BrainyUIRadioGroup(10, 20, ['Opponent', 'Boyfriend', 'Girlfriend'], 40);
 		characterTypeRadio.checked = 0;
 		characterTypeRadio.onClick = updateCharacters;
 		tab_group.add(characterTypeRadio);
 	}
 
-	var imageInputText:PsychUIInputText;
-	var idleInputText:PsychUIInputText;
-	var confirmInputText:PsychUIInputText;
-	var scaleStepper:PsychUINumericStepper;
-	var flipXCheckbox:PsychUICheckBox;
-	var antialiasingCheckbox:PsychUICheckBox;
+	var imageInputText:BrainyUIInputText;
+	var idleInputText:BrainyUIInputText;
+	var confirmInputText:BrainyUIInputText;
+	var scaleStepper:BrainyUINumericStepper;
+	var flipXCheckbox:BrainyUICheckBox;
+	var antialiasingCheckbox:BrainyUICheckBox;
 	function addCharacterUI() {
 		var tab_group = UI_mainbox.getTab('Character').menu;
 		
-		imageInputText = new PsychUIInputText(10, 20, 80, characterFile.image, 8);
-		idleInputText = new PsychUIInputText(10, imageInputText.y + 35, 100, characterFile.idle_anim, 8);
-		confirmInputText = new PsychUIInputText(10, idleInputText.y + 35, 100, characterFile.confirm_anim, 8);
+		imageInputText = new BrainyUIInputText(10, 20, 80, characterFile.image, 8);
+		idleInputText = new BrainyUIInputText(10, imageInputText.y + 35, 100, characterFile.idle_anim, 8);
+		confirmInputText = new BrainyUIInputText(10, idleInputText.y + 35, 100, characterFile.confirm_anim, 8);
 
-		flipXCheckbox = new PsychUICheckBox(10, confirmInputText.y + 30, "Flip X", 100);
+		flipXCheckbox = new BrainyUICheckBox(10, confirmInputText.y + 30, "Flip X", 100);
 		flipXCheckbox.onClick = function()
 		{
 			grpWeekCharacters.members[characterTypeRadio.checked].flipX = flipXCheckbox.checked;
 			characterFile.flipX = flipXCheckbox.checked;
 		};
 
-		antialiasingCheckbox = new PsychUICheckBox(10, flipXCheckbox.y + 30, "Antialiasing", 100);
+		antialiasingCheckbox = new BrainyUICheckBox(10, flipXCheckbox.y + 30, "Antialiasing", 100);
 		antialiasingCheckbox.checked = grpWeekCharacters.members[characterTypeRadio.checked].antialiasing;
 		antialiasingCheckbox.onClick = function()
 		{
@@ -134,11 +134,11 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 			characterFile.antialiasing = antialiasingCheckbox.checked;
 		};
 
-		var reloadImageButton:PsychUIButton = new PsychUIButton(140, confirmInputText.y + 30, "Reload Char", function() {
+		var reloadImageButton:BrainyUIButton = new BrainyUIButton(140, confirmInputText.y + 30, "Reload Char", function() {
 			reloadSelectedCharacter();
 		});
 		
-		scaleStepper = new PsychUINumericStepper(140, imageInputText.y, 0.05, 1, 0.1, 30, 2);
+		scaleStepper = new BrainyUINumericStepper(140, imageInputText.y, 0.05, 1, 0.1, 30, 2);
 
 		var confirmDescText = new FlxText(10, confirmInputText.y - 18, 0, 'Start Press animation on the .XML:');
 		tab_group.add(new FlxText(10, imageInputText.y - 18, 0, 'Image file name:'));
@@ -185,10 +185,10 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 	}
 
 	override public function UIEvent(id:String, sender:Dynamic) {
-		if(id == PsychUICheckBox.CLICK_EVENT)
+		if(id == BrainyUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;
 
-		if(id == PsychUIInputText.CHANGE_EVENT && (sender is PsychUIInputText)) {
+		if(id == BrainyUIInputText.CHANGE_EVENT && (sender is BrainyUIInputText)) {
 			if(sender == imageInputText) {
 				characterFile.image = imageInputText.text;
 				unsavedProgress = true;
@@ -199,7 +199,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 				characterFile.confirm_anim = confirmInputText.text;
 				unsavedProgress = true;
 			}
-		} else if(id == PsychUINumericStepper.CHANGE_EVENT && (sender is PsychUINumericStepper)) {
+		} else if(id == BrainyUINumericStepper.CHANGE_EVENT && (sender is BrainyUINumericStepper)) {
 			if (sender == scaleStepper) {
 				characterFile.scale = scaleStepper.value;
 				reloadSelectedCharacter();
@@ -209,7 +209,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 	}
 
 	override function update(elapsed:Float) {
-		if(PsychUIInputText.focusOn == null)
+		if(BrainyUIInputText.focusOn == null)
 		{
 			ClientPrefs.toggleVolumeKeys(true);
 			if(FlxG.keys.justPressed.ESCAPE) {

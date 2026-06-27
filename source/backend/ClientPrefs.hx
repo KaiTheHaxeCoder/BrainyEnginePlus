@@ -81,6 +81,7 @@ import states.TitleState;
 	public var developerMode:Bool = false;
 	public var showAlbum:Bool = true;
 	public var viz:Bool = false;
+	public var multiThreadedLoading = true;
 }
 
 class ClientPrefs {

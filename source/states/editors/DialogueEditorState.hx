@@ -12,7 +12,7 @@ import cutscenes.DialogueBoxPsych;
 import cutscenes.DialogueCharacter;
 import states.editors.content.Prompt;
 
-class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.PsychUIEvent
+class DialogueEditorState extends MusicBeatState implements BrainyUIEventHandler.BrainyUIEvent
 {
 	var character:DialogueCharacter;
 	var box:FlxSprite;
@@ -86,35 +86,35 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 		super.create();
 	}
 
-	var UI_box:PsychUIBox;
+	var UI_box:BrainyUIBox;
 	function addEditorBox()
 	{
-		UI_box = new PsychUIBox(FlxG.width - 260, 10, 250, 210, ['Dialogue Line']);
+		UI_box = new BrainyUIBox(FlxG.width - 260, 10, 250, 210, ['Dialogue Line']);
 		UI_box.scrollFactor.set();
 		addDialogueLineUI();
 		add(UI_box);
 	}
 
-	var characterInputText:PsychUIInputText;
-	var lineInputText:PsychUIInputText;
-	var angryCheckbox:PsychUICheckBox;
-	var speedStepper:PsychUINumericStepper;
-	var soundInputText:PsychUIInputText;
+	var characterInputText:BrainyUIInputText;
+	var lineInputText:BrainyUIInputText;
+	var angryCheckbox:BrainyUICheckBox;
+	var speedStepper:BrainyUINumericStepper;
+	var soundInputText:BrainyUIInputText;
 	function addDialogueLineUI() {
 		var tab_group = UI_box.getTab('Dialogue Line').menu;
 
-		characterInputText = new PsychUIInputText(10, 20, 80, DialogueCharacter.DEFAULT_CHARACTER, 8);
-		speedStepper = new PsychUINumericStepper(10, characterInputText.y + 40, 0.005, 0.05, 0, 0.5, 3);
+		characterInputText = new BrainyUIInputText(10, 20, 80, DialogueCharacter.DEFAULT_CHARACTER, 8);
+		speedStepper = new BrainyUINumericStepper(10, characterInputText.y + 40, 0.005, 0.05, 0, 0.5, 3);
 
-		angryCheckbox = new PsychUICheckBox(speedStepper.x + 120, speedStepper.y, "Angry Textbox", 200);
+		angryCheckbox = new BrainyUICheckBox(speedStepper.x + 120, speedStepper.y, "Angry Textbox", 200);
 		angryCheckbox.onClick = function()
 		{
 			updateTextBox();
 			dialogueFile.dialogue[curSelected].boxState = (angryCheckbox.checked ? 'angry' : 'normal');
 		};
 
-		soundInputText = new PsychUIInputText(10, speedStepper.y + 40, 150, '', 8);
-		lineInputText = new PsychUIInputText(10, soundInputText.y + 35, 200, DEFAULT_TEXT, 8);
+		soundInputText = new BrainyUIInputText(10, speedStepper.y + 40, 150, '', 8);
+		lineInputText = new BrainyUIInputText(10, soundInputText.y + 35, 200, DEFAULT_TEXT, 8);
 		lineInputText.onPressEnter = function(e)
 		{
 			if(e.shiftKey)
@@ -122,13 +122,13 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 				lineInputText.text += '\n';
 				lineInputText.caretIndex++;
 			}
-			else PsychUIInputText.focusOn = null;
+			else BrainyUIInputText.focusOn = null;
 		};
 
-		var loadButton:PsychUIButton = new PsychUIButton(20, lineInputText.y + 25, "Load Dialogue", function() {
+		var loadButton:BrainyUIButton = new BrainyUIButton(20, lineInputText.y + 25, "Load Dialogue", function() {
 			loadDialogue();
 		});
-		var saveButton:PsychUIButton = new PsychUIButton(loadButton.x + 120, loadButton.y, "Save Dialogue", function() {
+		var saveButton:BrainyUIButton = new BrainyUIButton(loadButton.x + 120, loadButton.y, "Save Dialogue", function() {
 			saveDialogue();
 		});
 
@@ -237,10 +237,10 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 	}
 
 	override public function UIEvent(id:String, sender:Dynamic) {
-		if(id == PsychUICheckBox.CLICK_EVENT)
+		if(id == BrainyUICheckBox.CLICK_EVENT)
 			unsavedProgress = true;
 
-		if(id == PsychUIInputText.CHANGE_EVENT && (sender is PsychUIInputText)) {
+		if(id == BrainyUIInputText.CHANGE_EVENT && (sender is BrainyUIInputText)) {
 			if (sender == characterInputText)
 			{
 				character.reloadCharacterJson(characterInputText.text);
@@ -275,7 +275,7 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 				if(daText.sound == null) daText.sound = '';
 			}
 			unsavedProgress = true;
-		} else if(id == PsychUINumericStepper.CHANGE_EVENT && (sender == speedStepper)) {
+		} else if(id == BrainyUINumericStepper.CHANGE_EVENT && (sender == speedStepper)) {
 			dialogueFile.dialogue[curSelected].speed = speedStepper.value;
 			if(Math.isNaN(dialogueFile.dialogue[curSelected].speed) || dialogueFile.dialogue[curSelected].speed == null || dialogueFile.dialogue[curSelected].speed < 0.001) {
 				dialogueFile.dialogue[curSelected].speed = 0.0;
@@ -305,7 +305,7 @@ class DialogueEditorState extends MusicBeatState implements PsychUIEventHandler.
 			}
 		}
 
-		if(PsychUIInputText.focusOn == null)
+		if(BrainyUIInputText.focusOn == null)
 		{
 			ClientPrefs.toggleVolumeKeys(true);
 			if(FlxG.keys.justPressed.SPACE) {

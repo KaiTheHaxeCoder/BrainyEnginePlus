@@ -55,6 +55,8 @@ import crowplexus.hscript.Expr.Error as IrisError;
 import crowplexus.hscript.Printer;
 #end
 
+import funkin.objects.FunkinLyric;
+
 /**
  * This is where all the Gameplay stuff happens and is managed
  *
@@ -250,6 +252,8 @@ class PlayState extends MusicBeatState
 	#if funkin.vis
 	var viz:Visualizer;
 	#end
+
+	var lyric:funkin.objects.FunkinLyric;
 
 	// Lua shit
 	#if LUA_ALLOWED public var luaArray:Array<FunkinLua> = []; #end
@@ -1502,6 +1506,10 @@ class PlayState extends MusicBeatState
 
 			case 'Play Sound':
 				Paths.sound(event.value1); //Precache sound
+
+			case 'Show Lyric':
+				lyric = new FunkinLyric('');
+				uiGroup.add(lyric);
 		}
 		stagesFunc(function(stage:BaseStage) stage.eventPushedUnique(event));
 	}
@@ -2314,6 +2322,14 @@ class PlayState extends MusicBeatState
 			case 'Play Sound':
 				if(flValue2 == null) flValue2 = 1;
 				FlxG.sound.play(Paths.sound(value1), flValue2);
+
+			case 'Show Lyric':
+				lyric.visible = true;
+				lyric.text = value1;
+
+			case 'Hide Lyric':
+				if (lyric != null)
+					lyric.visible = false;
 		}
 
 		stagesFunc(function(stage:BaseStage) stage.eventCalled(eventName, value1, value2, flValue1, flValue2, strumTime));

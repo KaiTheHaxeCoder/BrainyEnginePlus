@@ -1,20 +1,20 @@
 package options;
 
-import backend.ui.PsychUIEventHandler.PsychUIEvent;
+import brainy.ui.BrainyUIEventHandler.BrainyUIEvent;
 import states.MainMenuState;
 import options.*;
 import options.objects.OptionSprite;
 
 import options.Option;
 
-class OptionsState extends MusicBeatState implements PsychUIEvent
+class OptionsState extends MusicBeatState implements BrainyUIEvent
 {
     public static var onPlayState:Bool = false;
     public static var instance:OptionsState;
 
     public var bg:FlxSprite;
 
-    public var box:PsychUIBox;
+    public var box:BrainyUIBox;
 
     override public function new()
     {
@@ -34,7 +34,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 
         add(bg);
 
-        box = new PsychUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals', 'Misc', 'Experiments']);
+        box = new BrainyUIBox(0, 0, FlxG.width - 100, FlxG.height - 50, ["Gameplay", 'Graphics', 'Visuals', 'Misc', 'Experiments']);
         box.canMove = false;
         box.canMinimize = false;
         box.screenCenter();
@@ -144,7 +144,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 
         objY += spacing;
 
-        var controls = new PsychUIButton(objX, objY, 'Open Controls Menu', function() {
+        var controls = new BrainyUIButton(objX, objY, 'Open Controls Menu', function() {
             box.active = false;
             openSubState(new ControlsSubState());
         }, 160);
@@ -252,7 +252,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 
         objY += spacing;
 
-        var noteColors = new PsychUIButton(objX, objY, 'Open Note Colors Menu', function() {
+        var noteColors = new BrainyUIButton(objX, objY, 'Open Note Colors Menu', function() {
             box.active = false;
             openSubState(new NotesColorSubState());
         }, 160);
@@ -260,7 +260,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 
         objY += spacing;
 
-        var offsetMenu = new PsychUIButton(objX, objY, 'Open Offset Menu', function() {
+        var offsetMenu = new BrainyUIButton(objX, objY, 'Open Offset Menu', function() {
             MusicBeatState.switchState(new NoteOffsetState());
         }, 160);
         tab.add(offsetMenu);
@@ -318,6 +318,7 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 	}
 
     var viz:OptionSprite;
+    var mtl:OptionSprite;
 
     function createExperimentsTab()
     {
@@ -336,6 +337,12 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
         tab.add(viz);
         objY += spacing;
         #end
+
+        #if desktop
+        mtl = new OptionSprite(objX, objY, 'Multi-threaded Loading', 'viz', 'bool', "Improves loading times, but may crash the game on older PCs.");
+        tab.add(mtl);
+        objY += spacing;
+        #end
     }
 
     override public function UIEvent(id:String, sender:Dynamic) 
@@ -344,13 +351,13 @@ class OptionsState extends MusicBeatState implements PsychUIEvent
 
         switch (id)
         {
-            case PsychUISlider.CHANGE_EVENT:
+            case BrainyUISlider.CHANGE_EVENT:
                 if (sender == hitsoundVolume)
                 {
                     FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.data.hitsoundVolume);
                 }
 
-			case PsychUICheckBox.CLICK_EVENT:
+			case BrainyUICheckBox.CLICK_EVENT:
 				if (sender == fpsCounter)
 					if(Main.fpsVar != null)
 						Main.fpsVar.visible = ClientPrefs.data.showFPS;
