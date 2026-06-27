@@ -102,12 +102,6 @@ class FreeplayState extends MusicBeatState
 					colors = [146, 113, 253];
 				}
 				addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
-
-				Mods.currentModDirectory = songs[curSelected].folder;
-				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-				Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
-
-				var album = (PlayState.SONG?.album != null) ? PlayState.SONG?.album : 'placeholder';
 			}
 		}
 		Mods.loadTopMod();
@@ -126,7 +120,7 @@ class FreeplayState extends MusicBeatState
 			songText.targetY = i;
 			grpSongs.add(songText);
 
-			songText.scaleX = Math.min(1, 980 / songText.width);
+			songText.scaleX = Math.min(1, (669.9/ songText.width));
 			songText.snapToPosition();
 
 			Mods.currentModDirectory = songs[i].folder;
@@ -195,11 +189,12 @@ class FreeplayState extends MusicBeatState
 		player = new MusicPlayer(this);
 		add(player);
 
-		album = new FlxSprite();
+		album = new FlxSprite(FlxG.width * 1.25);
 		album.scale.set(1.25, 1.25);
-		album.angle =  5;
+		album.angle = -90;
 		album.screenCenter(Y);
-		album.x = FlxG.width - 350;
+		var nextPos = FlxG.width - 350;
+		FlxTween.tween(album, {x: nextPos, angle: 5}, FlxEase.cubeInOut(0.5));
 		loadAlbum('placeholder');
 
 		album.visible = ClientPrefs.data.showAlbum;

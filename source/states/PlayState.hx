@@ -576,7 +576,7 @@ class PlayState extends MusicBeatState
 		#if funkin.vis
 		if (ClientPrefs.data.viz)
 		{
-			viz = new Visualizer(0, 0);
+			viz = new Visualizer(FlxG.sound.music, 0, 0);
 			add(viz);
 		}
 		#end
